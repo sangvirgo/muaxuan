@@ -1,0 +1,55 @@
+**Inversion of Control (IoC)** là một nguyên tắc thiết kế trong lập trình hướng đối tượng nhằm giúp việc quản lý các đối tượng và phụ thuộc của chúng trở nên linh hoạt hơn. IoC cho phép các phần của chương trình không phụ thuộc chặt chẽ vào nhau mà được cấu hình và liên kết một cách động, giúp code dễ bảo trì, kiểm thử và mở rộng.
+
+### Cách hiểu về IoC
+IoC có thể được hiểu là "đảo ngược điều khiển", tức là thay vì một đối tượng tự tạo và quản lý các đối tượng phụ thuộc của nó, nhiệm vụ này được chuyển sang một đối tượng khác (như IoC container). IoC container sẽ chịu trách nhiệm tạo ra các đối tượng, quản lý vòng đời của chúng và liên kết các phụ thuộc vào với nhau.
+
+### Ví dụ trong Spring Framework
+Trong Spring Framework, IoC thường được thực hiện thông qua **Dependency Injection (DI)**. Đây là cách mà Spring container sẽ tự động cung cấp các phụ thuộc cho một đối tượng thay vì đối tượng đó tự tạo ra chúng. Có các cách tiêm phụ thuộc (DI) phổ biến như sau:
+
+1. **Constructor Injection**:
+   Các phụ thuộc được cung cấp thông qua constructor của đối tượng.
+   ```java
+   public class UserService {
+       private UserRepository userRepository;
+
+       // Constructor injection
+       public UserService(UserRepository userRepository) {
+           this.userRepository = userRepository;
+       }
+   }
+   ```
+
+2. **Setter Injection**:
+   Các phụ thuộc được cung cấp thông qua setter method.
+   ```java
+   public class UserService {
+       private UserRepository userRepository;
+
+       // Setter injection
+       public void setUserRepository(UserRepository userRepository) {
+           this.userRepository = userRepository;
+       }
+   }
+   ```
+
+3. **Field Injection** (ít khuyến khích hơn):
+   Các phụ thuộc được cung cấp trực tiếp vào các trường (fields) của đối tượng thông qua annotation `@Autowired`.
+   ```java
+   public class UserService {
+       @Autowired
+       private UserRepository userRepository;
+   }
+   ```
+
+### Lợi ích của IoC
+- **Giảm sự phụ thuộc (Loose Coupling)**: IoC tách biệt việc tạo và quản lý vòng đời của đối tượng ra khỏi bản thân các đối tượng đó, giúp các đối tượng có thể dễ dàng thay thế hoặc mở rộng mà không cần thay đổi code.
+- **Tăng khả năng tái sử dụng**: Các đối tượng có thể được tái sử dụng ở nhiều nơi khác nhau vì chúng không bị ràng buộc chặt chẽ với các phụ thuộc cụ thể.
+- **Dễ kiểm thử**: Với IoC, các phụ thuộc có thể dễ dàng được thay thế bằng các đối tượng giả lập (mock objects) khi kiểm thử, giúp viết unit test dễ dàng hơn.
+
+### Tổng kết
+IoC là một nguyên tắc quan trọng giúp cho việc phát triển phần mềm trở nên linh hoạt và dễ bảo trì hơn. Trong các framework như Spring, IoC là một trong những yếu tố cốt lõi để xây dựng các ứng dụng theo mô hình lập trình hướng đối tượng, giúp quản lý các phụ thuộc một cách hiệu quả thông qua các container và cơ chế Dependency Injection.
+
+
+
+
+
