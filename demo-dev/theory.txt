@@ -53,3 +53,30 @@ IoC là một nguyên tắc quan trọng giúp cho việc phát triển phần m
 
 
 
+**Dependency Injection (DI)** là một mẫu thiết kế trong lập trình hướng đối tượng, được sử dụng để thực hiện **Inversion of Control (IoC)**. Nó cho phép một đối tượng nhận các phụ thuộc của mình từ một nguồn bên ngoài thay vì tự tạo ra, giúp cho mã nguồn trở nên linh hoạt hơn, dễ bảo trì và dễ kiểm thử hơn.
+
+### Dependency Injection hoạt động như thế nào?
+Trong DI, trách nhiệm tạo ra và quản lý các phụ thuộc được ủy thác cho một thành phần bên ngoài (thường được gọi là **container**). Container này cung cấp các phụ thuộc cần thiết cho đối tượng, giúp đối tượng có thể tập trung vào các chức năng chính của mình thay vì phải quản lý cách các phụ thuộc được tạo ra.
+
+### Các loại Dependency Injection
+Có ba loại chính của DI:
+
+1. **Constructor Injection**: Các phụ thuộc được truyền vào đối tượng thông qua constructor (hàm khởi tạo).
+2. **Setter Injection**: Các phụ thuộc được truyền vào thông qua các phương thức setter.
+3. **Field Injection**: Các phụ thuộc được gán trực tiếp vào các biến của đối tượng, thường sử dụng annotation (chỉ thị) như `@Autowired` trong Spring.
+
+### Lợi ích của Dependency Injection
+- **Giảm độ kết dính (Coupling)**: DI giúp giảm sự phụ thuộc của các lớp vào nhau, giúp mã nguồn dễ thay đổi và mở rộng.
+- **Dễ kiểm thử (Testable)**: Với DI, ta có thể dễ dàng thay thế các phụ thuộc bằng các mock object hoặc stub khi kiểm thử.
+- **Tái sử dụng mã nguồn**: Bằng cách tách biệt các phụ thuộc, các lớp có thể được tái sử dụng trong các ngữ cảnh khác nhau mà không cần sửa đổi.
+
+DI thường được sử dụng trong các framework như **Spring** để quản lý sự phụ thuộc giữa các bean, giúp ứng dụng trở nên dễ bảo trì và phát triển.
+
+
+
+
+
+
+
+
+@Component là một annotation trong Spring Framework được sử dụng để đánh dấu một class là một Spring bean. Khi một class được đánh dấu với @Component, Spring sẽ tự động phát hiện và quản lý nó như một bean trong container của Spring. Điều này cho phép Spring thực hiện dependency injection và quản lý vòng đời của bean đó.
