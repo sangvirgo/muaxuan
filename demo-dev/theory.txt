@@ -80,3 +80,111 @@ DI thường được sử dụng trong các framework như **Spring** để qu�
 
 
 @Component là một annotation trong Spring Framework được sử dụng để đánh dấu một class là một Spring bean. Khi một class được đánh dấu với @Component, Spring sẽ tự động phát hiện và quản lý nó như một bean trong container của Spring. Điều này cho phép Spring thực hiện dependency injection và quản lý vòng đời của bean đó.
+
+
+
+
+@SpringBootApplication là một annotation trong Spring Boot, được sử dụng để đánh dấu một class là một Spring Boot application.
+Annotation này kết hợp nhiều annotation khác như @Configuration, @EnableAutoConfiguration, @ComponentScan để cung cấp các cấu
+hình mặc định cho ứng dụng Spring Boot. Khi một class được đánh dấu với @SpringBootApplication, Spring Boot sẽ tự động cấu hình và khởi tạo ứng dụng dựa trên các cấu hình mặc định và các bean được quản lý trong container của Spring.
+
+
+
+@EnableAutoConfiguration
+@EnableAutoConfiguration là một annotation trong Spring Boot, được sử dụng để tự động cấu hình Spring application dựa trên các dependencies mà bạn đã thêm vào pom.xml hoặc build.gradle. Annotation này giúp Spring Boot tự động cấu hình các bean cần thiết mà không cần phải cấu hình thủ công.
+@ComponentScan
+@ComponentScan là một annotation trong Spring Framework, được sử dụng để quét các package cụ thể để tìm và đăng ký các bean với Spring container. Annotation này giúp Spring tìm kiếm các class được đánh dấu với @Component, @Service, @Repository, và @Controller để quản lý chúng như các bean.
+@Configuration
+@Configuration là một annotation trong Spring Framework, được sử dụng để đánh dấu một class là một nguồn cấu hình cho Spring IoC container. Class được đánh dấu với @Configuration có thể chứa các phương thức được đánh dấu với @Bean để định nghĩa các bean.
+
+
+
+Trong Dependency Injection (DI), **setter injection** và **constructor injection** là hai phương pháp phổ biến để cung cấp các phụ thuộc cho đối tượng. Mỗi loại đều có ưu và nhược điểm riêng, phù hợp với các tình huống khác nhau. Dưới đây là sự khác biệt và cách sử dụng của từng loại:
+
+### 1. Constructor Injection
+**Constructor Injection** là cách truyền các phụ thuộc cho đối tượng thông qua constructor (hàm khởi tạo). Điều này có nghĩa là các phụ thuộc cần thiết sẽ được cung cấp tại thời điểm tạo đối tượng thông qua các tham số của constructor.
+
+**Ví dụ:**
+
+```java
+public class UserService {
+    private final UserRepository userRepository;
+
+    // Inject UserRepository thông qua constructor
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+}
+```
+
+Trong ví dụ trên, `UserService` nhận `UserRepository` như một phụ thuộc thông qua constructor. Khi tạo một instance của `UserService`, ta phải cung cấp một `UserRepository` hợp lệ.
+
+**Ưu điểm:**
+- **An toàn hơn**: Các phụ thuộc được cung cấp ngay khi đối tượng được tạo ra, giúp đảm bảo đối tượng luôn có đầy đủ các phụ thuộc cần thiết.
+- **Dễ test hơn**: Do các phụ thuộc được cung cấp qua constructor, việc mock (giả lập) các đối tượng trong quá trình kiểm thử sẽ trở nên đơn giản.
+- **Đơn giản hóa logic**: Vì các phụ thuộc là `final`, ta biết chắc rằng chúng sẽ không bị thay đổi sau khi được thiết lập.
+
+**Nhược điểm:**
+- Nếu đối tượng có quá nhiều phụ thuộc, constructor sẽ có quá nhiều tham số, làm mã nguồn trở nên khó đọc và quản lý.
+
+### 2. Setter Injection
+**Setter Injection** là cách truyền các phụ thuộc thông qua các phương thức setter. Thay vì cung cấp phụ thuộc ngay khi khởi tạo đối tượng, ta có thể thiết lập các phụ thuộc sau khi đối tượng được tạo ra.
+
+**Ví dụ:**
+
+```java
+public class UserService {
+    private UserRepository userRepository;
+
+    // Inject UserRepository thông qua setter
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+}
+```
+
+Trong ví dụ trên, `UserService` có một phương thức `setUserRepository` để nhận `UserRepository` như một phụ thuộc.
+
+**Ưu điểm:**
+- **Linh hoạt hơn**: Cho phép thay đổi các phụ thuộc sau khi đối tượng được tạo ra, hữu ích trong các tình huống khi phụ thuộc có thể thay đổi sau này.
+- **Đơn giản với ít phụ thuộc**: Nếu đối tượng chỉ có một vài phụ thuộc, việc sử dụng setter có thể làm cho mã nguồn dễ đọc hơn.
+
+**Nhược điểm:**
+- **Không đảm bảo đầy đủ phụ thuộc**: Vì các phụ thuộc được thiết lập sau khi đối tượng được tạo ra, có thể xảy ra tình trạng các phụ thuộc chưa được thiết lập trước khi sử dụng, dẫn đến lỗi runtime.
+- **Phức tạp hơn khi kiểm thử**: Khi kiểm thử, cần chú ý thiết lập đầy đủ các phụ thuộc trước khi sử dụng đối tượng, nếu không sẽ gây lỗi.
+
+### Khi nào nên dùng Constructor Injection hay Setter Injection?
+- **Constructor Injection**: Thích hợp khi phụ thuộc là bắt buộc để đối tượng hoạt động. Nếu một phụ thuộc mà không có sẽ làm đối tượng hoạt động không chính xác, thì nên dùng constructor injection.
+- **Setter Injection**: Thích hợp cho các phụ thuộc tùy chọn hoặc khi cần thay đổi phụ thuộc trong quá trình chạy của ứng dụng.
+
+Trong thực tế, kết hợp cả hai cách này cũng khá phổ biến, sử dụng constructor injection cho các phụ thuộc bắt buộc và setter injection cho các phụ thuộc tùy chọn.
+
+
+
+
+
+@Primary là một annotation trong Spring Framework, được dùng để chỉ định bean ưu tiên khi có nhiều bean cùng loại (cùng kiểu) trong Spring Container. Annotation này giúp Spring quyết định sẽ inject bean nào khi có nhiều lựa chọn.
+
+Khi nào dùng @Primary?
+Khi bạn có nhiều bean cùng kiểu và cần chỉ định một trong số đó làm bean mặc định, bạn có thể sử dụng @Primary để cho Spring biết đâu là lựa chọn ưu tiên:
+
+Nếu bạn không dùng @Primary, Spring sẽ không biết phải inject bean nào trong số các bean có cùng kiểu và sẽ xảy ra lỗi NoUniqueBeanDefinitionException.
+@Primary giúp bạn giảm thiểu việc phải sử dụng @Qualifier cho các trường hợp đơn giản, vì nó tự động ưu tiên bean được đánh dấu.
+
+@Qualifier has higher priority than @Primary
+should use @Qualifier when you have multiple beans of the same type and want to specify which one to inject.
+
+
+
+
+
+@Lazy is an annotation in Spring Framework used to indicate that a bean should be lazily initialized
+This means that the bean will not be created until it is first requested.
+By default, Spring beans are eagerly initialized when the application context is created.
+However, using @Lazy allows you to defer the initialization of a bean until it is actually needed.
+
+When to use @Lazy?
+
+
+
+

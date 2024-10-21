@@ -3,6 +3,11 @@ package com.sang.thefirstapp;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+//@SpringBootApplication(
+//		scanBasePackages = {"com.sang.thefirstapp",
+//							"util"}
+//)
+
 @SpringBootApplication
 public class ThefirstappApplication {
 
