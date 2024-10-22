@@ -188,3 +188,121 @@ When to use @Lazy?
 
 
 
+
+
+
+Tóm tắt các loại Bean Scopes trong Spring:
+Scope	        Mô tả	                                            Phạm vi sử dụng
+singleton	    Một instance duy nhất trong container.	            Ứng dụng chung.
+prototype	    Tạo một instance mới mỗi khi yêu cầu bean.	        Ứng dụng chung.
+request	        Tạo một instance mới cho mỗi HTTP request.	        Chỉ dùng trong ứng dụng web.
+session	        Tạo một instance mới cho mỗi HTTP session.	        Chỉ dùng trong ứng dụng web.
+application	    Tạo một instance mới cho mỗi ServletContext.	    Chỉ dùng trong ứng dụng web.
+websocket	    Tạo một instance mới cho mỗi phiên WebSocket.	    Chỉ dùng trong ứng dụng có WebSocket.
+
+Khi nào nên sử dụng từng loại scope?
+Sử dụng singleton khi bạn chỉ cần một instance cho toàn bộ ứng dụng, giúp tiết kiệm bộ nhớ và quản lý dễ dàng hơn.
+Sử dụng prototype khi bạn cần nhiều đối tượng độc lập (ví dụ: các đối tượng thay đổi theo thời gian).
+Sử dụng request và session khi làm việc với ứng dụng web và cần quản lý trạng thái dựa trên các yêu cầu hoặc phiên người dùng.
+application thường được dùng khi bạn cần chia sẻ dữ liệu hoặc cấu hình trong toàn bộ ứng dụng web.
+
+
+
+
+
+
+
+Bean trong Spring là một đối tượng được quản lý bởi Spring Container. Khi bạn viết một ứng dụng sử dụng Spring, bạn có thể khai báo các đối tượng (class) và yêu cầu Spring tạo ra và quản lý các đối tượng này cho bạn. Những đối tượng này chính là các Bean.
+
+Cách hiểu đơn giản về Bean:
+Giống như các thành phần trong nhà bếp:
+
+Hãy tưởng tượng bạn có một nhà bếp (Spring Container) và bạn muốn nấu ăn.
+Bạn cần các nguyên liệu như gạo, rau, thịt, v.v.
+Mỗi nguyên liệu này giống như một Bean.
+Bạn không cần phải đi ra ngoài và mua các nguyên liệu này mỗi khi bạn nấu ăn. Thay vào đó, bạn yêu cầu người trợ lý nhà bếp (Spring) cung cấp nguyên liệu từ nhà kho.
+Người trợ lý này sẽ lấy đúng nguyên liệu cho bạn (dựa trên cách bạn yêu cầu) và đưa cho bạn.
+Bean là các đối tượng được Spring tạo ra và quản lý:
+
+Khi bạn khai báo một class trong Spring và đánh dấu nó là một Bean (bằng cách sử dụng các annotation như @Component, @Service, @Repository, hoặc @Bean), Spring sẽ biết rằng cần phải tạo ra một instance của class này và lưu trữ nó trong Spring Container.
+Khi bạn cần sử dụng đối tượng này trong các phần khác của ứng dụng, Spring sẽ tự động inject (đưa vào) nó cho bạn, dựa trên các yêu cầu mà bạn chỉ định.
+
+
+
+Các bước trong Bean Lifecycle:
+Instantiation (Tạo đối tượng):
+
+Khi Spring Container khởi động, nó sẽ tạo một instance của Bean dựa trên cấu hình (annotation hoặc XML).
+Populate Properties (Gán giá trị cho thuộc tính):
+
+Sau khi Bean được tạo ra, Spring sẽ gán giá trị cho các thuộc tính của Bean (ví dụ, inject các Bean khác hoặc giá trị cơ bản).
+@PostConstruct (Initialization Callback):
+
+Nếu Bean của bạn có phương thức được đánh dấu bằng @PostConstruct, Spring sẽ gọi phương thức này sau khi hoàn thành việc gán giá trị cho các thuộc tính.
+Đây là nơi bạn có thể thực hiện các thiết lập cần thiết cho Bean trước khi sử dụng.
+afterPropertiesSet() (InitializingBean Interface):
+
+Nếu Bean của bạn triển khai InitializingBean và có phương thức afterPropertiesSet(), Spring sẽ gọi phương thức này sau khi hoàn tất giai đoạn gán thuộc tính.
+Bạn có thể dùng phương thức này để khởi tạo thêm, nhưng việc này không phổ biến bằng việc dùng @PostConstruct.
+Custom Init Method (Phương thức khởi tạo tùy chỉnh):
+
+Bạn cũng có thể chỉ định một phương thức khởi tạo tùy chỉnh bằng cách sử dụng thuộc tính init-method trong cấu hình XML hoặc @Bean(initMethod = "yourInitMethod") trong cấu hình Java.
+Phương thức này sẽ được gọi sau khi các bước khởi tạo mặc định đã hoàn thành.
+Bean is Ready to Use (Bean đã sẵn sàng để sử dụng):
+
+Sau khi hoàn thành các bước trên, Bean đã sẵn sàng để sử dụng trong ứng dụng.
+Ứng dụng có thể gọi các phương thức của Bean bất cứ lúc nào.
+@PreDestroy (Destruction Callback):
+
+Khi Spring Container bị đóng (ví dụ, khi ứng dụng kết thúc hoặc bạn gọi context.close()), nếu Bean của bạn có phương thức được đánh dấu bằng @PreDestroy, Spring sẽ gọi phương thức này trước khi hủy Bean.
+Đây là nơi bạn thực hiện các thao tác dọn dẹp, như đóng kết nối hoặc giải phóng tài nguyên.
+destroy() (DisposableBean Interface):
+
+Nếu Bean của bạn triển khai DisposableBean và có phương thức destroy(), Spring sẽ gọi phương thức này trong giai đoạn hủy.
+Phương thức này thường được dùng để dọn dẹp tài nguyên.
+Custom Destroy Method (Phương thức hủy tùy chỉnh):
+
+Bạn có thể định nghĩa phương thức hủy tùy chỉnh với thuộc tính destroy-method trong cấu hình XML hoặc @Bean(destroyMethod = "yourDestroyMethod") trong cấu hình Java.
+Phương thức này sẽ được gọi trước khi Bean bị loại bỏ hoàn toàn.
+
+
+
+
+@Bean là một annotation trong Spring Framework, thường được sử dụng trong các lớp cấu hình (@Configuration) để định nghĩa một Bean. Khi bạn sử dụng @Bean, bạn đang tạo ra một đối tượng và yêu cầu Spring quản lý nó như một Bean trong Spring Container. Các Bean này sẽ được Spring khởi tạo, quản lý vòng đời, và có thể được inject vào các thành phần khác trong ứng dụng.
+
+Khi nào sử dụng @Bean?
+@Bean thường được dùng trong các trường hợp sau:
+
+Cấu hình thủ công: Khi bạn muốn tạo một đối tượng (Bean) nhưng không thể hoặc không muốn dùng các annotation khác như @Component, @Service, hoặc @Repository.
+Khởi tạo phức tạp: Khi quá trình khởi tạo Bean cần có logic phức tạp hơn chỉ là việc dùng constructor hoặc setter.
+Bean của bên thứ ba: Khi bạn cần khởi tạo các đối tượng từ các thư viện bên ngoài mà bạn không thể thêm annotation vào lớp đó.
+
+
+
+
+
+
+
+Hibernate/JPA
+So sánh nhanh giữa ba công nghệ:
+Tiêu chí	        JDBC	                                                                                            JPA	                Hibernate
+Mức độ	            API cơ bản	                                                                                        API tiêu chuẩn	Framework ORM triển khai JPA
+Kiểm soát	        Hoàn toàn kiểm soát các câu lệnh SQL	Tự động ánh xạ và giảm bớt việc viết SQL	Ánh xạ tự động, tính năng nâng cao như cache
+Code	            Dài, phức tạp	Ngắn gọn hơn nhờ các annotation	Tương tự JPA, cung cấp thêm các tính năng đặc biệt
+Khả năng bảo trì	Khó bảo trì với ứng dụng lớn	Dễ bảo trì hơn nhờ ánh xạ đối tượng	Dễ bảo trì, cộng đồng lớn và nhiều tài liệu
+Cấu hình	        Đơn giản	Phức tạp hơn vì cần ánh xạ đối tượng	Phức tạp nhất do có nhiều tùy chọn cấu hình
+Kết luận:
+JDBC: Phù hợp khi bạn cần toàn quyền kiểm soát các truy vấn SQL và xử lý dữ liệu theo cách riêng, hoặc khi bạn cần truy cập dữ liệu nhanh và hiệu suất là ưu tiên hàng đầu.
+JPA: Hữu ích khi bạn muốn đơn giản hóa việc ánh xạ dữ liệu giữa các đối tượng Java và bảng trong CSDL, làm cho mã dễ đọc và dễ bảo trì hơn.
+Hibernate: Lựa chọn tốt khi bạn muốn sử dụng đầy đủ các tính năng của JPA và cần các tính năng nâng cao mà Hibernate cung cấp, như caching và quản lý các mối quan hệ phức tạp.
+
+
+
+Ý nghĩa của CRUD trong phát triển phần mềm:
+CRUD rất quan trọng vì nó đại diện cho những hành động cơ bản cần thiết khi quản lý dữ liệu trong bất kỳ ứng dụng nào, từ web, mobile đến desktop.
+Khi bạn tạo một API hoặc dịch vụ web, thường bạn sẽ tạo các điểm cuối (endpoints) để thực hiện các thao tác CRUD này.
+Ví dụ: Một RESTful API có thể có các endpoint như sau:
+POST /users: Tạo mới một người dùng (Create).
+GET /users: Lấy danh sách người dùng (Read).
+PUT /users/{id}: Cập nhật thông tin người dùng (Update).
+DELETE /users/{id}: Xóa một người dùng (Delete).
