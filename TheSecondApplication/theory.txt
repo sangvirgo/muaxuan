@@ -1,0 +1,372 @@
+**Inversion of Control (IoC)** là một nguyên tắc thiết kế trong lập trình hướng đối tượng nhằm giúp việc quản lý các đối tượng và phụ thuộc của chúng trở nên linh hoạt hơn. IoC cho phép các phần của chương trình không phụ thuộc chặt chẽ vào nhau mà được cấu hình và liên kết một cách động, giúp code dễ bảo trì, kiểm thử và mở rộng.
+
+### Cách hiểu về IoC
+IoC có thể được hiểu là "đảo ngược điều khiển", tức là thay vì một đối tượng tự tạo và quản lý các đối tượng phụ thuộc của nó, nhiệm vụ này được chuyển sang một đối tượng khác (như IoC container). IoC container sẽ chịu trách nhiệm tạo ra các đối tượng, quản lý vòng đời của chúng và liên kết các phụ thuộc vào với nhau.
+
+### Ví dụ trong Spring Framework
+Trong Spring Framework, IoC thường được thực hiện thông qua **Dependency Injection (DI)**. Đây là cách mà Spring container sẽ tự động cung cấp các phụ thuộc cho một đối tượng thay vì đối tượng đó tự tạo ra chúng. Có các cách tiêm phụ thuộc (DI) phổ biến như sau:
+
+1. **Constructor Injection**:
+   Các phụ thuộc được cung cấp thông qua constructor của đối tượng.
+   ```java
+   public class UserService {
+       private UserRepository userRepository;
+
+       // Constructor injection
+       public UserService(UserRepository userRepository) {
+           this.userRepository = userRepository;
+       }
+   }
+   ```
+
+2. **Setter Injection**:
+   Các phụ thuộc được cung cấp thông qua setter method.
+   ```java
+   public class UserService {
+       private UserRepository userRepository;
+
+       // Setter injection
+       public void setUserRepository(UserRepository userRepository) {
+           this.userRepository = userRepository;
+       }
+   }
+   ```
+
+3. **Field Injection** (ít khuyến khích hơn):
+   Các phụ thuộc được cung cấp trực tiếp vào các trường (fields) của đối tượng thông qua annotation `@Autowired`.
+   ```java
+   public class UserService {
+       @Autowired
+       private UserRepository userRepository;
+   }
+   ```
+
+### Lợi ích của IoC
+- **Giảm sự phụ thuộc (Loose Coupling)**: IoC tách biệt việc tạo và quản lý vòng đời của đối tượng ra khỏi bản thân các đối tượng đó, giúp các đối tượng có thể dễ dàng thay thế hoặc mở rộng mà không cần thay đổi code.
+- **Tăng khả năng tái sử dụng**: Các đối tượng có thể được tái sử dụng ở nhiều nơi khác nhau vì chúng không bị ràng buộc chặt chẽ với các phụ thuộc cụ thể.
+- **Dễ kiểm thử**: Với IoC, các phụ thuộc có thể dễ dàng được thay thế bằng các đối tượng giả lập (mock objects) khi kiểm thử, giúp viết unit test dễ dàng hơn.
+
+### Tổng kết
+IoC là một nguyên tắc quan trọng giúp cho việc phát triển phần mềm trở nên linh hoạt và dễ bảo trì hơn. Trong các framework như Spring, IoC là một trong những yếu tố cốt lõi để xây dựng các ứng dụng theo mô hình lập trình hướng đối tượng, giúp quản lý các phụ thuộc một cách hiệu quả thông qua các container và cơ chế Dependency Injection.
+
+
+
+
+
+**Dependency Injection (DI)** là một mẫu thiết kế trong lập trình hướng đối tượng, được sử dụng để thực hiện **Inversion of Control (IoC)**. Nó cho phép một đối tượng nhận các phụ thuộc của mình từ một nguồn bên ngoài thay vì tự tạo ra, giúp cho mã nguồn trở nên linh hoạt hơn, dễ bảo trì và dễ kiểm thử hơn.
+
+### Dependency Injection hoạt động như thế nào?
+Trong DI, trách nhiệm tạo ra và quản lý các phụ thuộc được ủy thác cho một thành phần bên ngoài (thường được gọi là **container**). Container này cung cấp các phụ thuộc cần thiết cho đối tượng, giúp đối tượng có thể tập trung vào các chức năng chính của mình thay vì phải quản lý cách các phụ thuộc được tạo ra.
+
+### Các loại Dependency Injection
+Có ba loại chính của DI:
+
+1. **Constructor Injection**: Các phụ thuộc được truyền vào đối tượng thông qua constructor (hàm khởi tạo).
+2. **Setter Injection**: Các phụ thuộc được truyền vào thông qua các phương thức setter.
+3. **Field Injection**: Các phụ thuộc được gán trực tiếp vào các biến của đối tượng, thường sử dụng annotation (chỉ thị) như `@Autowired` trong Spring.
+
+### Lợi ích của Dependency Injection
+- **Giảm độ kết dính (Coupling)**: DI giúp giảm sự phụ thuộc của các lớp vào nhau, giúp mã nguồn dễ thay đổi và mở rộng.
+- **Dễ kiểm thử (Testable)**: Với DI, ta có thể dễ dàng thay thế các phụ thuộc bằng các mock object hoặc stub khi kiểm thử.
+- **Tái sử dụng mã nguồn**: Bằng cách tách biệt các phụ thuộc, các lớp có thể được tái sử dụng trong các ngữ cảnh khác nhau mà không cần sửa đổi.
+
+DI thường được sử dụng trong các framework như **Spring** để quản lý sự phụ thuộc giữa các bean, giúp ứng dụng trở nên dễ bảo trì và phát triển.
+
+
+
+
+
+
+
+
+@Component là một annotation trong Spring Framework được sử dụng để đánh dấu một class là một Spring bean. Khi một class được đánh dấu với @Component, Spring sẽ tự động phát hiện và quản lý nó như một bean trong container của Spring. Điều này cho phép Spring thực hiện dependency injection và quản lý vòng đời của bean đó.
+
+
+
+
+@SpringBootApplication là một annotation trong Spring Boot, được sử dụng để đánh dấu một class là một Spring Boot application.
+Annotation này kết hợp nhiều annotation khác như @Configuration, @EnableAutoConfiguration, @ComponentScan để cung cấp các cấu
+hình mặc định cho ứng dụng Spring Boot. Khi một class được đánh dấu với @SpringBootApplication, Spring Boot sẽ tự động cấu hình và khởi tạo ứng dụng dựa trên các cấu hình mặc định và các bean được quản lý trong container của Spring.
+
+
+
+@EnableAutoConfiguration
+@EnableAutoConfiguration là một annotation trong Spring Boot, được sử dụng để tự động cấu hình Spring application dựa trên các dependencies mà bạn đã thêm vào pom.xml hoặc build.gradle. Annotation này giúp Spring Boot tự động cấu hình các bean cần thiết mà không cần phải cấu hình thủ công.
+@ComponentScan
+@ComponentScan là một annotation trong Spring Framework, được sử dụng để quét các package cụ thể để tìm và đăng ký các bean với Spring container. Annotation này giúp Spring tìm kiếm các class được đánh dấu với @Component, @Service, @Repository, và @Controller để quản lý chúng như các bean.
+@Configuration
+@Configuration là một annotation trong Spring Framework, được sử dụng để đánh dấu một class là một nguồn cấu hình cho Spring IoC container. Class được đánh dấu với @Configuration có thể chứa các phương thức được đánh dấu với @Bean để định nghĩa các bean.
+
+
+
+Trong Dependency Injection (DI), **setter injection** và **constructor injection** là hai phương pháp phổ biến để cung cấp các phụ thuộc cho đối tượng. Mỗi loại đều có ưu và nhược điểm riêng, phù hợp với các tình huống khác nhau. Dưới đây là sự khác biệt và cách sử dụng của từng loại:
+
+### 1. Constructor Injection
+**Constructor Injection** là cách truyền các phụ thuộc cho đối tượng thông qua constructor (hàm khởi tạo). Điều này có nghĩa là các phụ thuộc cần thiết sẽ được cung cấp tại thời điểm tạo đối tượng thông qua các tham số của constructor.
+
+**Ví dụ:**
+
+```java
+public class UserService {
+    private final UserRepository userRepository;
+
+    // Inject UserRepository thông qua constructor
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+}
+```
+
+Trong ví dụ trên, `UserService` nhận `UserRepository` như một phụ thuộc thông qua constructor. Khi tạo một instance của `UserService`, ta phải cung cấp một `UserRepository` hợp lệ.
+
+**Ưu điểm:**
+- **An toàn hơn**: Các phụ thuộc được cung cấp ngay khi đối tượng được tạo ra, giúp đảm bảo đối tượng luôn có đầy đủ các phụ thuộc cần thiết.
+- **Dễ test hơn**: Do các phụ thuộc được cung cấp qua constructor, việc mock (giả lập) các đối tượng trong quá trình kiểm thử sẽ trở nên đơn giản.
+- **Đơn giản hóa logic**: Vì các phụ thuộc là `final`, ta biết chắc rằng chúng sẽ không bị thay đổi sau khi được thiết lập.
+
+**Nhược điểm:**
+- Nếu đối tượng có quá nhiều phụ thuộc, constructor sẽ có quá nhiều tham số, làm mã nguồn trở nên khó đọc và quản lý.
+
+### 2. Setter Injection
+**Setter Injection** là cách truyền các phụ thuộc thông qua các phương thức setter. Thay vì cung cấp phụ thuộc ngay khi khởi tạo đối tượng, ta có thể thiết lập các phụ thuộc sau khi đối tượng được tạo ra.
+
+**Ví dụ:**
+
+```java
+public class UserService {
+    private UserRepository userRepository;
+
+    // Inject UserRepository thông qua setter
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+}
+```
+
+Trong ví dụ trên, `UserService` có một phương thức `setUserRepository` để nhận `UserRepository` như một phụ thuộc.
+
+**Ưu điểm:**
+- **Linh hoạt hơn**: Cho phép thay đổi các phụ thuộc sau khi đối tượng được tạo ra, hữu ích trong các tình huống khi phụ thuộc có thể thay đổi sau này.
+- **Đơn giản với ít phụ thuộc**: Nếu đối tượng chỉ có một vài phụ thuộc, việc sử dụng setter có thể làm cho mã nguồn dễ đọc hơn.
+
+**Nhược điểm:**
+- **Không đảm bảo đầy đủ phụ thuộc**: Vì các phụ thuộc được thiết lập sau khi đối tượng được tạo ra, có thể xảy ra tình trạng các phụ thuộc chưa được thiết lập trước khi sử dụng, dẫn đến lỗi runtime.
+- **Phức tạp hơn khi kiểm thử**: Khi kiểm thử, cần chú ý thiết lập đầy đủ các phụ thuộc trước khi sử dụng đối tượng, nếu không sẽ gây lỗi.
+
+### Khi nào nên dùng Constructor Injection hay Setter Injection?
+- **Constructor Injection**: Thích hợp khi phụ thuộc là bắt buộc để đối tượng hoạt động. Nếu một phụ thuộc mà không có sẽ làm đối tượng hoạt động không chính xác, thì nên dùng constructor injection.
+- **Setter Injection**: Thích hợp cho các phụ thuộc tùy chọn hoặc khi cần thay đổi phụ thuộc trong quá trình chạy của ứng dụng.
+
+Trong thực tế, kết hợp cả hai cách này cũng khá phổ biến, sử dụng constructor injection cho các phụ thuộc bắt buộc và setter injection cho các phụ thuộc tùy chọn.
+
+
+
+
+
+@Primary là một annotation trong Spring Framework, được dùng để chỉ định bean ưu tiên khi có nhiều bean cùng loại (cùng kiểu) trong Spring Container. Annotation này giúp Spring quyết định sẽ inject bean nào khi có nhiều lựa chọn.
+
+Khi nào dùng @Primary?
+Khi bạn có nhiều bean cùng kiểu và cần chỉ định một trong số đó làm bean mặc định, bạn có thể sử dụng @Primary để cho Spring biết đâu là lựa chọn ưu tiên:
+
+Nếu bạn không dùng @Primary, Spring sẽ không biết phải inject bean nào trong số các bean có cùng kiểu và sẽ xảy ra lỗi NoUniqueBeanDefinitionException.
+@Primary giúp bạn giảm thiểu việc phải sử dụng @Qualifier cho các trường hợp đơn giản, vì nó tự động ưu tiên bean được đánh dấu.
+
+@Qualifier has higher priority than @Primary
+should use @Qualifier when you have multiple beans of the same type and want to specify which one to inject.
+
+
+
+
+
+@Lazy is an annotation in Spring Framework used to indicate that a bean should be lazily initialized
+This means that the bean will not be created until it is first requested.
+By default, Spring beans are eagerly initialized when the application context is created.
+However, using @Lazy allows you to defer the initialization of a bean until it is actually needed.
+
+When to use @Lazy?
+
+
+
+
+
+
+
+Tóm tắt các loại Bean Scopes trong Spring:
+Scope	        Mô tả	                                            Phạm vi sử dụng
+singleton	    Một instance duy nhất trong container.	            Ứng dụng chung.
+prototype	    Tạo một instance mới mỗi khi yêu cầu bean.	        Ứng dụng chung.
+request	        Tạo một instance mới cho mỗi HTTP request.	        Chỉ dùng trong ứng dụng web.
+session	        Tạo một instance mới cho mỗi HTTP session.	        Chỉ dùng trong ứng dụng web.
+application	    Tạo một instance mới cho mỗi ServletContext.	    Chỉ dùng trong ứng dụng web.
+websocket	    Tạo một instance mới cho mỗi phiên WebSocket.	    Chỉ dùng trong ứng dụng có WebSocket.
+
+Khi nào nên sử dụng từng loại scope?
+Sử dụng singleton khi bạn chỉ cần một instance cho toàn bộ ứng dụng, giúp tiết kiệm bộ nhớ và quản lý dễ dàng hơn.
+Sử dụng prototype khi bạn cần nhiều đối tượng độc lập (ví dụ: các đối tượng thay đổi theo thời gian).
+Sử dụng request và session khi làm việc với ứng dụng web và cần quản lý trạng thái dựa trên các yêu cầu hoặc phiên người dùng.
+application thường được dùng khi bạn cần chia sẻ dữ liệu hoặc cấu hình trong toàn bộ ứng dụng web.
+
+
+
+
+
+
+
+Bean trong Spring là một đối tượng được quản lý bởi Spring Container. Khi bạn viết một ứng dụng sử dụng Spring, bạn có thể khai báo các đối tượng (class) và yêu cầu Spring tạo ra và quản lý các đối tượng này cho bạn. Những đối tượng này chính là các Bean.
+
+Cách hiểu đơn giản về Bean:
+Giống như các thành phần trong nhà bếp:
+
+Hãy tưởng tượng bạn có một nhà bếp (Spring Container) và bạn muốn nấu ăn.
+Bạn cần các nguyên liệu như gạo, rau, thịt, v.v.
+Mỗi nguyên liệu này giống như một Bean.
+Bạn không cần phải đi ra ngoài và mua các nguyên liệu này mỗi khi bạn nấu ăn. Thay vào đó, bạn yêu cầu người trợ lý nhà bếp (Spring) cung cấp nguyên liệu từ nhà kho.
+Người trợ lý này sẽ lấy đúng nguyên liệu cho bạn (dựa trên cách bạn yêu cầu) và đưa cho bạn.
+Bean là các đối tượng được Spring tạo ra và quản lý:
+
+Khi bạn khai báo một class trong Spring và đánh dấu nó là một Bean (bằng cách sử dụng các annotation như @Component, @Service, @Repository, hoặc @Bean), Spring sẽ biết rằng cần phải tạo ra một instance của class này và lưu trữ nó trong Spring Container.
+Khi bạn cần sử dụng đối tượng này trong các phần khác của ứng dụng, Spring sẽ tự động inject (đưa vào) nó cho bạn, dựa trên các yêu cầu mà bạn chỉ định.
+
+
+
+Các bước trong Bean Lifecycle:
+Instantiation (Tạo đối tượng):
+
+Khi Spring Container khởi động, nó sẽ tạo một instance của Bean dựa trên cấu hình (annotation hoặc XML).
+Populate Properties (Gán giá trị cho thuộc tính):
+
+Sau khi Bean được tạo ra, Spring sẽ gán giá trị cho các thuộc tính của Bean (ví dụ, inject các Bean khác hoặc giá trị cơ bản).
+@PostConstruct (Initialization Callback):
+
+Nếu Bean của bạn có phương thức được đánh dấu bằng @PostConstruct, Spring sẽ gọi phương thức này sau khi hoàn thành việc gán giá trị cho các thuộc tính.
+Đây là nơi bạn có thể thực hiện các thiết lập cần thiết cho Bean trước khi sử dụng.
+afterPropertiesSet() (InitializingBean Interface):
+
+Nếu Bean của bạn triển khai InitializingBean và có phương thức afterPropertiesSet(), Spring sẽ gọi phương thức này sau khi hoàn tất giai đoạn gán thuộc tính.
+Bạn có thể dùng phương thức này để khởi tạo thêm, nhưng việc này không phổ biến bằng việc dùng @PostConstruct.
+Custom Init Method (Phương thức khởi tạo tùy chỉnh):
+
+Bạn cũng có thể chỉ định một phương thức khởi tạo tùy chỉnh bằng cách sử dụng thuộc tính init-method trong cấu hình XML hoặc @Bean(initMethod = "yourInitMethod") trong cấu hình Java.
+Phương thức này sẽ được gọi sau khi các bước khởi tạo mặc định đã hoàn thành.
+Bean is Ready to Use (Bean đã sẵn sàng để sử dụng):
+
+Sau khi hoàn thành các bước trên, Bean đã sẵn sàng để sử dụng trong ứng dụng.
+Ứng dụng có thể gọi các phương thức của Bean bất cứ lúc nào.
+@PreDestroy (Destruction Callback):
+
+Khi Spring Container bị đóng (ví dụ, khi ứng dụng kết thúc hoặc bạn gọi context.close()), nếu Bean của bạn có phương thức được đánh dấu bằng @PreDestroy, Spring sẽ gọi phương thức này trước khi hủy Bean.
+Đây là nơi bạn thực hiện các thao tác dọn dẹp, như đóng kết nối hoặc giải phóng tài nguyên.
+destroy() (DisposableBean Interface):
+
+Nếu Bean của bạn triển khai DisposableBean và có phương thức destroy(), Spring sẽ gọi phương thức này trong giai đoạn hủy.
+Phương thức này thường được dùng để dọn dẹp tài nguyên.
+Custom Destroy Method (Phương thức hủy tùy chỉnh):
+
+Bạn có thể định nghĩa phương thức hủy tùy chỉnh với thuộc tính destroy-method trong cấu hình XML hoặc @Bean(destroyMethod = "yourDestroyMethod") trong cấu hình Java.
+Phương thức này sẽ được gọi trước khi Bean bị loại bỏ hoàn toàn.
+
+
+
+
+@Bean là một annotation trong Spring Framework, thường được sử dụng trong các lớp cấu hình (@Configuration) để định nghĩa một Bean. Khi bạn sử dụng @Bean, bạn đang tạo ra một đối tượng và yêu cầu Spring quản lý nó như một Bean trong Spring Container. Các Bean này sẽ được Spring khởi tạo, quản lý vòng đời, và có thể được inject vào các thành phần khác trong ứng dụng.
+
+Khi nào sử dụng @Bean?
+@Bean thường được dùng trong các trường hợp sau:
+
+Cấu hình thủ công: Khi bạn muốn tạo một đối tượng (Bean) nhưng không thể hoặc không muốn dùng các annotation khác như @Component, @Service, hoặc @Repository.
+Khởi tạo phức tạp: Khi quá trình khởi tạo Bean cần có logic phức tạp hơn chỉ là việc dùng constructor hoặc setter.
+Bean của bên thứ ba: Khi bạn cần khởi tạo các đối tượng từ các thư viện bên ngoài mà bạn không thể thêm annotation vào lớp đó.
+
+
+
+
+
+
+
+Hibernate/JPA
+So sánh nhanh giữa ba công nghệ:
+Tiêu chí	        JDBC	                                                                                            JPA	                Hibernate
+Mức độ	            API cơ bản	                                                                                        API tiêu chuẩn	Framework ORM triển khai JPA
+Kiểm soát	        Hoàn toàn kiểm soát các câu lệnh SQL	Tự động ánh xạ và giảm bớt việc viết SQL	Ánh xạ tự động, tính năng nâng cao như cache
+Code	            Dài, phức tạp	Ngắn gọn hơn nhờ các annotation	Tương tự JPA, cung cấp thêm các tính năng đặc biệt
+Khả năng bảo trì	Khó bảo trì với ứng dụng lớn	Dễ bảo trì hơn nhờ ánh xạ đối tượng	Dễ bảo trì, cộng đồng lớn và nhiều tài liệu
+Cấu hình	        Đơn giản	Phức tạp hơn vì cần ánh xạ đối tượng	Phức tạp nhất do có nhiều tùy chọn cấu hình
+Kết luận:
+JDBC: Phù hợp khi bạn cần toàn quyền kiểm soát các truy vấn SQL và xử lý dữ liệu theo cách riêng, hoặc khi bạn cần truy cập dữ liệu nhanh và hiệu suất là ưu tiên hàng đầu.
+JPA: Hữu ích khi bạn muốn đơn giản hóa việc ánh xạ dữ liệu giữa các đối tượng Java và bảng trong CSDL, làm cho mã dễ đọc và dễ bảo trì hơn.
+Hibernate: Lựa chọn tốt khi bạn muốn sử dụng đầy đủ các tính năng của JPA và cần các tính năng nâng cao mà Hibernate cung cấp, như caching và quản lý các mối quan hệ phức tạp.
+
+
+
+Ý nghĩa của CRUD trong phát triển phần mềm:
+CRUD rất quan trọng vì nó đại diện cho những hành động cơ bản cần thiết khi quản lý dữ liệu trong bất kỳ ứng dụng nào, từ web, mobile đến desktop.
+Khi bạn tạo một API hoặc dịch vụ web, thường bạn sẽ tạo các điểm cuối (endpoints) để thực hiện các thao tác CRUD này.
+Ví dụ: Một RESTful API có thể có các endpoint như sau:
+POST /users: Tạo mới một người dùng (Create).
+GET /users: Lấy danh sách người dùng (Read).
+PUT /users/{id}: Cập nhật thông tin người dùng (Update).
+DELETE /users/{id}: Xóa một người dùng (Delete).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	@Bean
+	public CommandLineRunner commandLineRunner(String[] args) {
+		return runner -> {
+			System.out.println("Hello, Spring Boot!");
+		};
+
+explaination:
+Trong đoạn mã trên, phương thức `commandLineRunner` được đánh dấu với annotation `@Bean` trong một ứng dụng Spring Boot. Đây là những gì phương thức này thực hiện và ý nghĩa của từng phần:
+
+### Giải thích từng phần:
+
+1. **Annotation `@Bean`**:
+   - Annotation `@Bean` được sử dụng để đánh dấu một phương thức trong lớp cấu hình của Spring (trong trường hợp này là lớp `TheSecondApplication`). Phương thức được đánh dấu với `@Bean` sẽ trả về một đối tượng, và đối tượng này sẽ được Spring quản lý và đưa vào trong context (còn được gọi là "Spring container").
+   - Khi Spring Boot khởi động, nó sẽ gọi phương thức này để tạo ra một bean (một đối tượng được quản lý bởi Spring).
+
+2. **`CommandLineRunner`**:
+   - `CommandLineRunner` là một interface trong Spring Boot, có một phương thức duy nhất là `run()`. Khi ứng dụng Spring Boot hoàn tất việc khởi tạo, nó sẽ tự động gọi phương thức `run()` của tất cả các beans thuộc loại `CommandLineRunner`.
+   - `CommandLineRunner` thường được dùng để thực hiện một số tác vụ ngay sau khi ứng dụng khởi động, như khởi tạo dữ liệu, kiểm tra kết nối hoặc thực hiện một số logic cần thiết trước khi ứng dụng chính thức chạy.
+
+3. **`commandLineRunner(String[] args)`**:
+   - Ở đây, `commandLineRunner` là một phương thức trả về một `CommandLineRunner` và sử dụng cú pháp lambda (`runner -> {...}`).
+   - `String[] args` là các tham số được truyền vào từ dòng lệnh khi khởi động ứng dụng (các tham số này cũng được chuyển vào phương thức `main()`).
+
+4. **`return runner -> { System.out.println("Hello, Spring Boot!"); };`**:
+   - Đây là một biểu thức lambda, tạo ra một `CommandLineRunner` với hành động cụ thể bên trong `run()`.
+   - Khi `CommandLineRunner` này được thực thi, nó sẽ in ra dòng chữ `"Hello, Spring Boot!"`.
+   - Việc sử dụng biểu thức lambda giúp đoạn mã ngắn gọn và dễ đọc hơn. Nó tương đương với việc viết một class riêng lẻ để triển khai `CommandLineRunner`.
+
+### Tổng kết lại:
+
+- Khi ứng dụng Spring Boot này khởi động, nó sẽ tìm kiếm tất cả các beans loại `CommandLineRunner` trong context.
+- Sau khi khởi động hoàn tất, Spring Boot sẽ gọi phương thức `run()` của `CommandLineRunner` này.
+- Kết quả là ứng dụng sẽ in ra dòng `"Hello, Spring Boot!"` ngay khi ứng dụng khởi động thành công.
+
+### Tại sao dùng `CommandLineRunner`:
+
+- `CommandLineRunner` thường được sử dụng để thực hiện các hành động khi ứng dụng vừa mới khởi động. Điều này có thể hữu ích để:
+  - Chạy các tác vụ kiểm tra.
+  - Khởi tạo một số dữ liệu mặc định.
+  - Kiểm tra kết nối đến các dịch vụ khác.
+  - Thực hiện các thao tác mà chỉ cần chạy một lần khi ứng dụng khởi động.
+
+Với cách viết này, Spring Boot sẽ tự động quản lý việc gọi `run()` và bạn không cần phải lo lắng về việc tự gọi nó.
+
+
+
+
+
+
+
