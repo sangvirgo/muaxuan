@@ -370,3 +370,79 @@ Với cách viết này, Spring Boot sẽ tự động quản lý việc gọi `
 
 
 
+as mentioned, hibernate is the default implementation of JPA, so you can use JPA without hibernate, but you can't use hibernate without JPA.
+
+
+**Entity class** trong Java và các ứng dụng sử dụng JPA (Java Persistence API) là một lớp (class) biểu diễn một bảng (table) trong cơ sở dữ liệu. Mỗi đối tượng (instance) của lớp này tương ứng với một dòng (record) trong bảng.
+
+### Giải thích về Entity Class:
+
+- **Annotation `@Entity`**:
+  - Để khai báo một lớp là một entity (thực thể), bạn cần sử dụng annotation `@Entity` trên lớp đó. Annotation này cho JPA biết rằng lớp này sẽ ánh xạ (map) đến một bảng trong cơ sở dữ liệu.
+  - Ví dụ:
+    ```java
+    import javax.persistence.Entity;
+    import javax.persistence.Id;
+
+    @Entity
+    public class User {
+        @Id
+        private Long id;
+        private String name;
+        private String email;
+
+        // Getters, setters, constructors, etc.
+    }
+    ```
+    Trong ví dụ trên, lớp `User` được khai báo là một entity.
+
+- **Mapping giữa các thuộc tính và cột**:
+  - Mỗi thuộc tính (field) trong entity class tương ứng với một cột (column) trong bảng cơ sở dữ liệu.
+  - Ví dụ, trong lớp `User`, các thuộc tính `id`, `name`, và `email` sẽ ánh xạ đến các cột `id`, `name`, và `email` trong bảng `User`.
+
+- **`@Id` annotation**:
+  - Annotation `@Id` được sử dụng để chỉ định thuộc tính nào sẽ là khóa chính (primary key) của bảng. Đây là trường duy nhất xác định một dòng trong bảng.
+  - Ví dụ, `@Id` trong lớp `User` chỉ định rằng `id` là khóa chính của bảng `User`.
+
+### Một số annotation phổ biến khác khi làm việc với Entity:
+
+- **`@Table`**:
+  - Mặc định, tên của bảng sẽ giống với tên của lớp. Tuy nhiên, bạn có thể dùng `@Table` để tùy chỉnh tên bảng.
+  - Ví dụ:
+    ```java
+    @Entity
+    @Table(name = "users_table")
+    public class User { ... }
+    ```
+    Trong ví dụ này, lớp `User` sẽ ánh xạ đến bảng có tên là `users_table`.
+
+- **`@Column`**:
+  - Mặc định, tên của cột sẽ giống với tên của thuộc tính trong class. Bạn có thể dùng `@Column` để tùy chỉnh tên cột, độ dài, kiểu dữ liệu, hoặc các thuộc tính khác của cột.
+  - Ví dụ:
+    ```java
+    @Column(name = "user_name", length = 50)
+    private String name;
+    ```
+    Thuộc tính `name` sẽ ánh xạ đến cột `user_name` với độ dài tối đa là 50 ký tự.
+
+### Entity Class trong JPA giúp gì?
+
+1. **ORM (Object-Relational Mapping)**:
+   - Entity class là một phần của cơ chế ORM, nơi mà các đối tượng Java (class) được ánh xạ với các bảng trong cơ sở dữ liệu. Điều này giúp lập trình viên có thể làm việc với dữ liệu dưới dạng đối tượng mà không cần viết các truy vấn SQL phức tạp.
+   - Khi bạn thực hiện các thao tác trên đối tượng Java (như thêm, sửa, xóa), JPA sẽ tự động chuyển các thao tác này thành các câu lệnh SQL tương ứng.
+
+2. **Tạo sự liên kết giữa các bảng**:
+   - Entity class cũng có thể chứa các mối quan hệ giữa các bảng như `@OneToOne`, `@OneToMany`, `@ManyToOne`, `@ManyToMany` để mô tả các liên kết (relationship) giữa các thực thể.
+
+### Tóm lại:
+
+- **Entity class** là một lớp Java được đánh dấu với `@Entity` và được sử dụng để ánh xạ với một bảng trong cơ sở dữ liệu.
+- Nó giúp lập trình viên làm việc với cơ sở dữ liệu một cách dễ dàng hơn thông qua các đối tượng Java, giảm thiểu việc viết các truy vấn SQL thủ công và giúp mã dễ đọc, dễ bảo trì hơn.
+
+
+
+
+
+if you dont declare any constructors, java will provide a no-argument constructor for free
+
+
