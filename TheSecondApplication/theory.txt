@@ -446,3 +446,384 @@ as mentioned, hibernate is the default implementation of JPA, so you can use JPA
 if you dont declare any constructors, java will provide a no-argument constructor for free
 
 
+### 1. `@Column` trong JPA:
+
+`@Column` là một annotation được sử dụng để chỉ định cách một thuộc tính (field) của entity sẽ ánh xạ đến một cột trong bảng cơ sở dữ liệu. Nó cung cấp các tùy chọn để tùy chỉnh tên cột, độ dài, kiểu dữ liệu, và các thuộc tính khác của cột.
+
+#### Các thuộc tính của `@Column`:
+- **`name`**: Đặt tên của cột trong bảng. Nếu không được chỉ định, tên cột sẽ mặc định là tên của thuộc tính.
+- **`length`**: Độ dài của cột. Thường sử dụng cho các thuộc tính kiểu `String`.
+- **`nullable`**: Chỉ định liệu cột có cho phép `null` hay không. Mặc định là `true`.
+- **`unique`**: Chỉ định liệu giá trị trong cột có phải là duy nhất hay không.
+- **`columnDefinition`**: Định nghĩa kiểu dữ liệu của cột.
+- **`insertable` / `updatable`**: Chỉ định liệu cột này có được phép ghi (insert) hay cập nhật (update) hay không.
+
+#### Ví dụ:
+```java
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "user_name", length = 100, nullable = false)
+    private String name;
+
+    @Column(unique = true)
+    private String email;
+
+    // Getters, setters, etc.
+}
+```
+- Ở ví dụ trên, thuộc tính `name` ánh xạ tới cột `user_name` trong bảng với độ dài tối đa là 100 và không cho phép giá trị `null`.
+- Thuộc tính `email` được ánh xạ đến một cột có các giá trị duy nhất.
+
+### 2. `@Table` trong JPA:
+
+`@Table` là một annotation được sử dụng trên lớp entity để chỉ định tên của bảng mà entity sẽ ánh xạ đến. Mặc định, tên của bảng sẽ giống với tên của lớp, nhưng bạn có thể thay đổi tên bảng và một số thuộc tính khác bằng cách sử dụng `@Table`.
+
+#### Các thuộc tính của `@Table`:
+- **`name`**: Đặt tên của bảng.
+- **`schema`**: Chỉ định schema mà bảng thuộc về (nếu có).
+- **`catalog`**: Chỉ định catalog của bảng (nếu có).
+- **`uniqueConstraints`**: Định nghĩa các ràng buộc duy nhất (unique constraints) trên bảng.
+- **`indexes`**: Định nghĩa các index trên bảng.
+
+#### Ví dụ:
+```java
+@Entity
+@Table(name = "users_table")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "user_name", length = 100)
+    private String name;
+
+    @Column(unique = true)
+    private String email;
+
+    // Getters, setters, etc.
+}
+```
+- Ở ví dụ trên, lớp `User` sẽ ánh xạ đến bảng có tên là `users_table` thay vì mặc định là `User`.
+
+### 3. `GenerationType.IDENTITY`:
+
+`GenerationType.IDENTITY` là một chiến lược tạo khóa chính (primary key) tự động cho các cột được đánh dấu là `@Id` trong JPA. Nó cho phép cơ sở dữ liệu tự động sinh ra giá trị cho cột khóa chính khi một bản ghi mới được thêm vào.
+
+#### Chi tiết về `GenerationType.IDENTITY`:
+- **Sử dụng cho các cột tự tăng (auto-increment)**:
+  - Với `GenerationType.IDENTITY`, giá trị của khóa chính sẽ được tự động tăng lên dựa trên giá trị cao nhất hiện tại trong cơ sở dữ liệu.
+  - Điều này hữu ích khi bạn muốn sử dụng tính năng tự động tăng (`AUTO_INCREMENT`) có sẵn của cơ sở dữ liệu.
+
+- **Hoạt động**: Khi thêm một bản ghi mới vào bảng, bạn không cần phải chỉ định giá trị cho trường ID, cơ sở dữ liệu sẽ tự động sinh ra giá trị tiếp theo.
+
+#### Ví dụ:
+```java
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "user_name")
+    private String name;
+
+    // Getters, setters, etc.
+}
+```
+- Ở ví dụ này, trường `id` sẽ được tự động sinh giá trị bởi cơ sở dữ liệu khi thêm mới bản ghi vào bảng `User`.
+
+#### Tóm tắt các chiến lược sinh ID khác:
+- **`GenerationType.AUTO`**: JPA sẽ tự động chọn chiến lược sinh ID phù hợp nhất với cơ sở dữ liệu đang sử dụng.
+- **`GenerationType.SEQUENCE`**: Sử dụng một sequence để tạo giá trị cho khóa chính (thường dùng với cơ sở dữ liệu như PostgreSQL).
+- **`GenerationType.TABLE`**: Sử dụng một bảng riêng trong cơ sở dữ liệu để tạo giá trị cho khóa chính (ít phổ biến hơn).
+
+### Tóm lại:
+
+- **`@Column`** giúp tùy chỉnh các thuộc tính của cột trong bảng khi ánh xạ từ một thuộc tính của entity.
+- **`@Table`** giúp tùy chỉnh tên bảng và các đặc tính khác của bảng mà entity sẽ ánh xạ đến.
+- **`GenerationType.IDENTITY`** cho phép cơ sở dữ liệu tự động tạo ra giá trị cho các khóa chính tự tăng, giúp dễ dàng quản lý các giá trị ID mà không cần tự tạo ra chúng.
+
+
+
+
+
+
+
+DAO(Data Access Object)
+### 1. `EntityManager` là gì?
+
+`EntityManager` là một API của JPA (Java Persistence API) dùng để quản lý các thực thể (entities) và các thao tác với cơ sở dữ liệu. Nó cung cấp các phương thức cơ bản để thao tác với các thực thể như thêm (persist), cập nhật (merge), xóa (remove), và truy vấn (query) dữ liệu.
+
+#### Các chức năng chính của `EntityManager`:
+- **Persist**: Lưu một thực thể vào cơ sở dữ liệu.
+- **Merge**: Đồng bộ hóa (merge) một thực thể đã thay đổi với thực thể đã lưu trữ trong cơ sở dữ liệu.
+- **Remove**: Xóa một thực thể khỏi cơ sở dữ liệu.
+- **Find**: Tìm kiếm một thực thể dựa trên khóa chính.
+- **Query**: Tạo các câu truy vấn (JPQL - Java Persistence Query Language).
+
+#### Ví dụ:
+```java
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    // Getters, setters, etc.
+}
+
+// Sử dụng EntityManager
+@Autowired
+private EntityManager entityManager;
+
+public void saveUser(User user) {
+    entityManager.persist(user); // Lưu user vào cơ sở dữ liệu
+}
+
+public User findUser(Long id) {
+    return entityManager.find(User.class, id); // Tìm user theo id
+}
+
+public void deleteUser(User user) {
+    entityManager.remove(user); // Xóa user khỏi cơ sở dữ liệu
+}
+```
+
+#### Khi nào sử dụng `EntityManager`?
+- Khi bạn cần **kiểm soát chi tiết** quá trình xử lý dữ liệu và muốn tự viết các phương thức lưu, cập nhật, xóa.
+- Khi cần làm việc với các **giao dịch** (transactions) phức tạp và cần tùy chỉnh các thao tác giao dịch.
+- Khi sử dụng **JPQL** hoặc **Native Queries** để tạo các truy vấn phức tạp.
+
+### 2. `JpaRepository` là gì?
+
+`JpaRepository` là một interface thuộc Spring Data JPA, mở rộng từ `CrudRepository` và `PagingAndSortingRepository`. Nó cung cấp sẵn các phương thức CRUD (Create, Read, Update, Delete) cũng như các phương thức tìm kiếm, phân trang, sắp xếp mà không cần phải tự viết các câu lệnh.
+
+#### Các chức năng chính của `JpaRepository`:
+- **save()**: Lưu hoặc cập nhật một thực thể.
+- **findById()**: Tìm thực thể theo ID.
+- **findAll()**: Tìm tất cả các thực thể.
+- **delete()**: Xóa một thực thể.
+- **count()**: Đếm số lượng thực thể.
+- **Paging and Sorting**: Hỗ trợ các thao tác phân trang và sắp xếp.
+
+#### Ví dụ:
+```java
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    // Getters, setters, etc.
+}
+
+public interface UserRepository extends JpaRepository<User, Long> {
+    List<User> findByName(String name); // Tìm kiếm theo tên
+}
+
+// Sử dụng JpaRepository
+@Autowired
+private UserRepository userRepository;
+
+public void saveUser(User user) {
+    userRepository.save(user); // Lưu hoặc cập nhật user
+}
+
+public User findUser(Long id) {
+    return userRepository.findById(id).orElse(null); // Tìm user theo id
+}
+
+public void deleteUser(User user) {
+    userRepository.delete(user); // Xóa user khỏi cơ sở dữ liệu
+}
+
+public List<User> findByName(String name) {
+    return userRepository.findByName(name); // Tìm user theo tên
+}
+```
+
+#### Khi nào sử dụng `JpaRepository`?
+- Khi bạn muốn **đơn giản hóa thao tác CRUD** và không cần phải viết quá nhiều mã lệnh.
+- Khi yêu cầu chỉ cần thực hiện các **truy vấn đơn giản** hoặc các truy vấn đã có sẵn trong `JpaRepository`.
+- Khi cần **phân trang** (pagination) và **sắp xếp** dữ liệu một cách dễ dàng.
+
+### 3. Sự khác nhau giữa `EntityManager` và `JpaRepository`:
+| **Đặc điểm** | **EntityManager** | **JpaRepository** |
+|--------------|-------------------|-------------------|
+| **Bản chất** | Là API gốc của JPA để thao tác với các thực thể. | Là một interface của Spring Data JPA mở rộng từ `CrudRepository`. |
+| **Cách sử dụng** | Cần tự viết các phương thức cho các thao tác CRUD. | Cung cấp sẵn các phương thức CRUD và có thể mở rộng để tạo các truy vấn tùy chỉnh. |
+| **Kiểm soát chi tiết** | Cung cấp nhiều quyền kiểm soát hơn đối với các thao tác dữ liệu và giao dịch. | Đơn giản hóa các thao tác với ít kiểm soát hơn. |
+| **Phù hợp với** | Các tác vụ phức tạp và cần kiểm soát chi tiết. | Các tác vụ đơn giản và muốn giảm thiểu mã lệnh cần viết. |
+
+### 4. Nên sử dụng `EntityManager` hay `JpaRepository`?
+- **Sử dụng `JpaRepository`**: Nếu bạn đang xây dựng các ứng dụng đơn giản, CRUD cơ bản và muốn tận dụng sự tiện lợi của Spring Data JPA để tự động hóa các thao tác với cơ sở dữ liệu.
+- **Sử dụng `EntityManager`**: Khi bạn cần thực hiện các truy vấn phức tạp, cần kiểm soát quá trình xử lý giao dịch hoặc khi muốn tối ưu hóa hiệu suất của các thao tác với cơ sở dữ liệu.
+
+Trong thực tế, bạn có thể kết hợp cả hai khi cần thiết: sử dụng `JpaRepository` cho các thao tác cơ bản và `EntityManager` cho các trường hợp cần tùy chỉnh cao hơn.
+
+
+
+
+if you need low-level control and flexible use EntityManager
+if you want high-level of abstraction use JPARespository
+
+
+
+`@Transactional` là một annotation (chú thích) trong Spring Framework, được sử dụng để khai báo các phương thức hoặc các lớp cần được thực thi trong một **giao dịch** (transaction). Giao dịch là một tập hợp các thao tác với cơ sở dữ liệu được thực thi như một đơn vị logic: tất cả các thao tác phải thành công thì toàn bộ giao dịch mới được cam kết (commit); nếu một thao tác nào đó thất bại, thì toàn bộ giao dịch sẽ bị hủy bỏ (rollback).
+
+### 1. Giao dịch (Transaction) là gì?
+Giao dịch trong cơ sở dữ liệu tuân theo nguyên tắc **ACID**:
+- **Atomicity** (Tính nguyên tử): Các thao tác trong giao dịch phải được thực thi như một đơn vị. Hoặc tất cả đều thành công, hoặc tất cả đều thất bại.
+- **Consistency** (Tính nhất quán): Giao dịch phải duy trì trạng thái nhất quán của cơ sở dữ liệu.
+- **Isolation** (Tính biệt lập): Các giao dịch phải thực thi một cách độc lập, không ảnh hưởng đến nhau.
+- **Durability** (Tính bền vững): Khi một giao dịch đã được cam kết, nó phải đảm bảo dữ liệu được lưu trữ vĩnh viễn.
+
+### 2. `@Transactional` là gì?
+`@Transactional` giúp Spring quản lý các giao dịch một cách tự động. Khi chú thích một phương thức bằng `@Transactional`, Spring sẽ bắt đầu một giao dịch khi phương thức đó được gọi, và sau khi phương thức hoàn thành, Spring sẽ quyết định **commit** hoặc **rollback** giao dịch dựa trên kết quả:
+
+- **Commit**: Nếu phương thức thực thi thành công, tất cả các thay đổi sẽ được lưu vào cơ sở dữ liệu.
+- **Rollback**: Nếu có bất kỳ ngoại lệ (exception) nào xảy ra trong quá trình thực thi, Spring sẽ rollback, tức là hủy bỏ tất cả các thay đổi và khôi phục trạng thái cơ sở dữ liệu như trước khi phương thức bắt đầu.
+
+### 3. Cách sử dụng `@Transactional`:
+#### 3.1. Trên một phương thức:
+```java
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Transactional
+    public void createUser(User user) {
+        userRepository.save(user);
+        // Nếu có exception xảy ra ở đây, thì thao tác lưu user cũng sẽ bị rollback.
+    }
+}
+```
+Trong ví dụ trên, nếu bất kỳ lỗi nào xảy ra trong quá trình tạo user, toàn bộ thay đổi trong phương thức `createUser` sẽ bị rollback.
+
+#### 3.2. Trên một class:
+```java
+@Service
+@Transactional
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public void createUser(User user) {
+        userRepository.save(user);
+    }
+
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
+}
+```
+Khi chú thích `@Transactional` ở cấp độ lớp, tất cả các phương thức trong lớp `UserService` sẽ được thực thi trong một giao dịch.
+
+### 4. Các thuộc tính của `@Transactional`:
+- **`propagation`**: Quy định cách các giao dịch mới tương tác với các giao dịch hiện tại.
+  - `REQUIRED` (mặc định): Sử dụng giao dịch hiện tại nếu có, nếu không sẽ tạo mới.
+  - `REQUIRES_NEW`: Luôn tạo một giao dịch mới, bất kể có giao dịch hiện tại hay không.
+  - `SUPPORTS`: Nếu có giao dịch hiện tại thì sử dụng, nếu không thì chạy không cần giao dịch.
+- **`isolation`**: Quy định mức độ cách ly của giao dịch, giúp kiểm soát các vấn đề như đọc bẩn, đọc lặp lại, ảo ảnh.
+  - `READ_UNCOMMITTED`, `READ_COMMITTED`, `REPEATABLE_READ`, `SERIALIZABLE`.
+- **`rollbackFor`**: Quy định danh sách các ngoại lệ mà khi xảy ra, giao dịch sẽ bị rollback.
+  - Ví dụ: `@Transactional(rollbackFor = Exception.class)`: Rollback cho mọi loại exception.
+- **`readOnly`**: Đặt là `true` khi phương thức chỉ thực hiện các thao tác đọc, giúp tối ưu hóa hiệu suất.
+  - Ví dụ: `@Transactional(readOnly = true)`: Phương thức này chỉ thực hiện các thao tác đọc dữ liệu.
+
+### 5. Khi nào nên sử dụng `@Transactional`?
+- Khi thực hiện các thao tác **thay đổi dữ liệu** (thêm, sửa, xóa) mà cần đảm bảo tính toàn vẹn và nhất quán.
+- Khi bạn cần **xử lý nhiều thao tác với cơ sở dữ liệu** trong một phương thức và muốn đảm bảo rằng tất cả các thao tác đó phải thành công hoặc không có thao tác nào được áp dụng.
+- Khi có yêu cầu thực hiện **các thao tác phức tạp** liên quan đến nhiều bảng hoặc liên quan đến nhiều phương thức khác nhau mà cần đảm bảo toàn vẹn dữ liệu.
+
+### 6. Ví dụ thực tế:
+```java
+@Transactional
+public void transferMoney(Long fromAccountId, Long toAccountId, BigDecimal amount) {
+    Account fromAccount = accountRepository.findById(fromAccountId).orElseThrow();
+    Account toAccount = accountRepository.findById(toAccountId).orElseThrow();
+
+    fromAccount.withdraw(amount);
+    toAccount.deposit(amount);
+
+    accountRepository.save(fromAccount);
+    accountRepository.save(toAccount);
+}
+```
+Trong ví dụ chuyển tiền giữa hai tài khoản, nếu có bất kỳ lỗi nào xảy ra (như tài khoản không đủ số dư), toàn bộ giao dịch sẽ bị rollback, và dữ liệu không bị mất mát.
+
+### 7. Kết luận:
+`@Transactional` là một công cụ mạnh mẽ trong Spring để quản lý giao dịch một cách tự động, giúp đảm bảo tính toàn vẹn và nhất quán của dữ liệu khi thực hiện các thao tác với cơ sở dữ liệu. Việc sử dụng `@Transactional` giúp giảm thiểu rủi ro lỗi dữ liệu khi có sự cố và đơn giản hóa quá trình xử lý giao dịch trong các ứng dụng doanh nghiệp.
+
+
+
+
+`@Repository` là một annotation (chú thích) trong Spring Framework, được sử dụng để đánh dấu một lớp là **DAO** (Data Access Object), tức là lớp chịu trách nhiệm truy cập và tương tác với cơ sở dữ liệu.
+
+### 1. Chức năng của `@Repository`:
+- `@Repository` giúp Spring **quản lý các bean** của lớp DAO, tương tự như `@Service` hay `@Controller`. Nó giúp Spring nhận diện và tạo các đối tượng bean để quản lý các lớp này.
+- `@Repository` giúp **xử lý các ngoại lệ** liên quan đến cơ sở dữ liệu. Khi được đánh dấu bằng `@Repository`, các ngoại lệ (exceptions) trong quá trình tương tác với cơ sở dữ liệu sẽ được Spring tự động chuyển đổi thành các loại ngoại lệ chung của Spring Data (như `DataAccessException`).
+
+### 2. Khi nào sử dụng `@Repository`:
+- Sử dụng `@Repository` cho các lớp chịu trách nhiệm **truy xuất dữ liệu** từ cơ sở dữ liệu, chẳng hạn như các lớp làm việc với `EntityManager`, `JDBC`, hoặc `JPA`.
+- Khi bạn muốn định nghĩa một lớp quản lý các thao tác CRUD (Create, Read, Update, Delete) trên các thực thể (entities) trong cơ sở dữ liệu.
+
+### 3. Ví dụ sử dụng `@Repository`:
+#### 3.1. Sử dụng với JPA:
+```java
+@Repository
+public class ProductRepository {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public Product findById(Long id) {
+        return entityManager.find(Product.class, id);
+    }
+
+    public void save(Product product) {
+        entityManager.persist(product);
+    }
+}
+```
+Trong ví dụ trên, `ProductRepository` là một lớp được đánh dấu bằng `@Repository`, giúp Spring hiểu rằng đây là một lớp truy cập dữ liệu. Nó sử dụng `EntityManager` để thao tác với cơ sở dữ liệu.
+
+#### 3.2. Sử dụng với Spring Data JPA:
+```java
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    List<Product> findByName(String name);
+}
+```
+Trong ví dụ này, `ProductRepository` mở rộng `JpaRepository` và được đánh dấu bằng `@Repository`. Spring sẽ tự động cung cấp các phương thức CRUD cơ bản và các phương thức tùy chỉnh như `findByName`.
+
+### 4. So sánh `@Repository` với `@Component`:
+- `@Repository` thực chất là một kiểu chuyên biệt của `@Component`, có nghĩa là các lớp được đánh dấu bằng `@Repository` cũng là một loại bean và được quản lý bởi Spring.
+- Sự khác biệt chính giữa `@Repository` và `@Component` là ở **mục đích sử dụng** và cách Spring xử lý các ngoại lệ liên quan đến truy cập cơ sở dữ liệu.
+- Sử dụng `@Repository` giúp cho mã nguồn của bạn rõ ràng hơn về mặt ngữ nghĩa, dễ hiểu rằng đây là một lớp dành cho việc truy xuất dữ liệu.
+
+### 5. Lợi ích của `@Repository`:
+- Giúp **tăng tính nhất quán** trong việc quản lý các lớp truy xuất dữ liệu.
+- Giúp **tự động hóa** việc xử lý các ngoại lệ liên quan đến cơ sở dữ liệu, giúp mã nguồn ngắn gọn và dễ bảo trì hơn.
+- **Kết hợp tốt** với các tính năng khác của Spring như `@Transactional`, giúp quản lý giao dịch một cách dễ dàng hơn trong các phương thức thao tác với dữ liệu.
+
+### 6. Kết luận:
+`@Repository` là một annotation quan trọng trong Spring, giúp đánh dấu các lớp truy cập dữ liệu và cung cấp cho chúng các tính năng đặc biệt như xử lý ngoại lệ tự động. Việc sử dụng `@Repository` giúp phân chia rõ ràng các tầng trong ứng dụng và tăng tính dễ đọc, dễ bảo trì cho mã nguồn của bạn.
+
+
+
+
+
+
+
