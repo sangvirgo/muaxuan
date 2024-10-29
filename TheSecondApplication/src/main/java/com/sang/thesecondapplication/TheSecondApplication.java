@@ -20,8 +20,19 @@ public class TheSecondApplication {
 		return runner -> {
 //			createStudent(studentDAO);
 
-			createMultipleStudents(studentDAO);
+//			createMultipleStudents(studentDAO);
+
+			readStudent(studentDAO);
 		};
+	}
+
+	private void readStudent(StudentDAO studentDAO) {
+		Student result=studentDAO.findById(1);
+		if(result!=null) {
+			System.out.println("Student found: "+result);
+		} else {
+			System.out.println("Student not found");
+		}
 	}
 
 	private void createMultipleStudents(StudentDAO studentDAO) {
