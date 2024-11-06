@@ -827,3 +827,13 @@ Trong ví dụ này, `ProductRepository` mở rộng `JpaRepository` và đượ
 
 
 
+spring.jpa.hibernate.ddl-auto
+
+
+none: no action
+create-only: database tables are created, existing tables are not dropped
+drop: database tables are dropped
+create: Databases tables are created, existing tables are dropped
+create-drop: same as create, but also drops tables when the SessionFactory is closed
+validate: validate the schema, make no changes to the database
+update: update the schema
