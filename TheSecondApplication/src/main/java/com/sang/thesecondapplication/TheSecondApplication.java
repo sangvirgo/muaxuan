@@ -22,7 +22,7 @@ public class TheSecondApplication {
 		return runner -> {
 //			createStudent(studentDAO);
 
-//			createMultipleStudents(studentDAO);
+			createMultipleStudents(studentDAO);
 
 //			readStudent(studentDAO);
 
@@ -34,7 +34,7 @@ public class TheSecondApplication {
 
 //			deleteStudent(studentDAO);
 
-			deleteAllStudents(studentDAO);
+//			deleteAllStudents(studentDAO);
 		};
 	}
 
