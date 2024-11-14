@@ -888,3 +888,11 @@ Lựa chọn `validate` hoặc `none` là tối ưu nhất cho sản xuất, đ�
 CHAPTER 3: REST API
 
 
+Sử dụng @ControllerAdvice:
+
+@ControllerAdvice là một annotation trong Spring Boot, cho phép bạn xử lý ngoại lệ từ mọi controller trong ứng dụng của mình, thay vì phải xử lý ở từng controller cụ thể.
+Khi có một ngoại lệ được ném ra từ bất kỳ controller nào, Spring sẽ tự động tìm và gọi StudentRestExceptionHandler để xử lý.
+
+
+
+
