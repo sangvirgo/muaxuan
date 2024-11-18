@@ -936,3 +936,30 @@ Quy trình hoạt động của merge():
 Khi merge(temp) được gọi, EntityManager sẽ trả về một đối tượng mới với các giá trị được đồng bộ từ temp. Đối tượng trả về này được quản lý bởi EntityManager (ở trạng thái managed), còn đối tượng temp ban đầu vẫn không được quản lý.
 Lý do save trả về đối tượng Employee:
 Vì merge() trả về đối tượng được quản lý trong EntityManager, nên nếu cần dùng lại đối tượng này sau khi lưu, bạn có thể thao tác với đối tượng do merge trả về thay vì temp để đảm bảo dữ liệu đồng bộ với cơ sở dữ liệu.
+
+
+
+
+
+
+Trong Spring Boot, HATEOAS và Optional là hai khái niệm thường được sử dụng cho các ứng dụng RESTful và xử lý dữ liệu.
+
+1. HATEOAS (Hypermedia as the Engine of Application State)
+HATEOAS là một phần của REST API, cho phép khách hàng (client) điều hướng qua API thông qua các liên kết (links) mà server cung cấp. Các liên kết này hướng dẫn client những hành động tiếp theo mà nó có thể thực hiện, giúp giảm thiểu sự phụ thuộc vào kiến thức cụ thể về cấu trúc API từ phía client.
+
+Trong Spring, Spring HATEOAS là một thư viện giúp dễ dàng thêm các liên kết này vào đối tượng trả về từ API.
+
+Ví dụ:
+
+Giả sử bạn có một API trả về thông tin nhân viên. Khi dùng HATEOAS, mỗi nhân viên không chỉ bao gồm dữ liệu mà còn có các liên kết đến các hành động liên quan (chẳng hạn như xem chi tiết nhân viên, cập nhật hoặc xóa nhân viên).
+
+
+
+
+
+Optional là một lớp trong Java 8 giúp xử lý các giá trị có thể null mà không gây ra NullPointerException. Nó bao bọc một đối tượng, giúp kiểm tra và xử lý các trường hợp không có dữ liệu (null) một cách an toàn và dễ dàng hơn.
+
+
+
+
+
