@@ -963,3 +963,78 @@ Optional là một lớp trong Java 8 giúp xử lý các giá trị có thể n
 
 
 
+Spring Data REST cung cấp các thuộc tính cấu hình để tùy chỉnh hành vi của REST API được tạo tự động dựa trên Spring Data repositories. Dưới đây là một số thuộc tính phổ biến trong spring.data.rest và mô tả về từng thuộc tính:
+
+1. spring.data.rest.base-path
+Description: Định nghĩa đường dẫn cơ sở cho tất cả các điểm cuối (endpoints) của REST API. Mặc định là /.
+Example:
+properties
+Copy code
+spring.data.rest.base-path=/api
+Usage: Khi cấu hình thuộc tính này, mọi API sẽ có tiền tố /api, ví dụ: /api/employees.
+2. spring.data.rest.default-page-size
+Description: Đặt kích thước mặc định của mỗi trang khi phân trang dữ liệu. Mặc định là 20.
+Example:
+properties
+Copy code
+spring.data.rest.default-page-size=10
+Usage: Giới hạn số bản ghi trên mỗi trang, hữu ích khi trả về một lượng dữ liệu lớn.
+3. spring.data.rest.max-page-size
+Description: Xác định kích thước tối đa cho mỗi trang khi sử dụng phân trang. Mặc định là 1000.
+Example:
+properties
+Copy code
+spring.data.rest.max-page-size=50
+Usage: Ngăn chặn yêu cầu quá nhiều dữ liệu trong một lần gọi.
+4. spring.data.rest.limit-param-name
+Description: Đặt tên cho tham số trong URL dùng để xác định kích thước của trang. Mặc định là size.
+Example:
+properties
+Copy code
+spring.data.rest.limit-param-name=limit
+Usage: Giúp tùy chỉnh tên tham số URL phù hợp với chuẩn naming của dự án.
+5. spring.data.rest.page-param-name
+Description: Đặt tên cho tham số trong URL dùng để xác định trang hiện tại. Mặc định là page.
+Example:
+properties
+Copy code
+spring.data.rest.page-param-name=pagina
+Usage: Khi muốn đổi tên tham số page sang tên khác, ví dụ, pagina.
+6. spring.data.rest.sort-param-name
+Description: Đặt tên cho tham số trong URL để sắp xếp kết quả. Mặc định là sort.
+Example:
+properties
+Copy code
+spring.data.rest.sort-param-name=orderby
+Usage: Giúp tùy chỉnh tên tham số sắp xếp để dễ hiểu hơn.
+7. spring.data.rest.detection-strategy
+Description: Xác định chiến lược phát hiện REST trên các repositories. Các giá trị có thể là default, annotated, visibility, all.
+Example:
+properties
+Copy code
+spring.data.rest.detection-strategy=annotated
+Usage: Giới hạn REST chỉ trên các repository được chú thích với @RepositoryRestResource.
+8. spring.data.rest.return-body-on-create
+Description: Xác định liệu API có trả về phần thân (body) khi tạo một thực thể mới hay không. Mặc định là false.
+Example:
+properties
+Copy code
+spring.data.rest.return-body-on-create=true
+Usage: Rất hữu ích khi bạn muốn nhận phản hồi là đối tượng đã tạo.
+9. spring.data.rest.return-body-on-update
+Description: Xác định liệu API có trả về phần thân (body) khi cập nhật một thực thể hay không. Mặc định là false.
+Example:
+properties
+Copy code
+spring.data.rest.return-body-on-update=true
+Usage: Tự động nhận được bản ghi cập nhật mà không cần yêu cầu thủ công.
+10. spring.data.rest.enable-enum-translation
+Description: Cho phép dịch các trường enum thành chuỗi khi trả về JSON. Mặc định là false.
+Example:
+properties
+Copy code
+spring.data.rest.enable-enum-translation=true
+Usage: Thay vì trả về enum.name, API sẽ trả về dạng dịch dễ đọc hơn nếu được cấu hình.
+
+
+
