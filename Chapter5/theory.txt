@@ -1038,3 +1038,150 @@ Usage: Thay vì trả về enum.name, API sẽ trả về dạng dịch dễ đ�
 
 
 
+
+
+
+
+
+CSRF là gì?
+CSRF (Cross-Site Request Forgery) là một lỗ hổng bảo mật trên các ứng dụng web, cho phép kẻ tấn công ép người dùng thực hiện các hành động không mong muốn trên một ứng dụng mà họ đã xác thực. Hành động này xảy ra mà người dùng không hề hay biết.
+
+Cách hoạt động của CSRF
+Người dùng đăng nhập vào ứng dụng A (ví dụ: ngân hàng trực tuyến) và nhận được một phiên làm việc (session) hoặc token xác thực (authentication token).
+Kẻ tấn công tạo một yêu cầu độc hại (ví dụ: chuyển tiền, thay đổi email).
+Kẻ tấn công gửi yêu cầu này qua email, link, hoặc trang web độc hại mà người dùng vô tình truy cập.
+Nếu người dùng đang đăng nhập vào ứng dụng A, trình duyệt của họ sẽ tự động gửi session hoặc token của họ, làm cho yêu cầu độc hại này hợp lệ.
+Hành động được thực hiện mà không cần sự đồng ý hoặc nhận thức của người dùng.
+Ví dụ minh họa về CSRF
+Kịch bản tấn công:
+
+Bạn đang đăng nhập vào một trang web ngân hàng với tài khoản của mình.
+Kẻ tấn công gửi cho bạn một link độc hại:
+vbnet
+Copy code
+http://mybank.com/transfer?amount=10000&to=attacker_account
+Bạn vô tình nhấp vào link trong khi vẫn đăng nhập vào ngân hàng.
+Trình duyệt gửi yêu cầu này kèm session của bạn, và ngân hàng thực hiện giao dịch.
+Kết quả: Tiền bị chuyển đến tài khoản của kẻ tấn công mà bạn không biết.
+
+CSRF trong Spring Security
+Spring Security có cơ chế bảo vệ chống lại CSRF bằng cách thêm một token bảo mật vào mỗi yêu cầu HTTP POST, PUT, DELETE. Token này phải được gửi từ client và khớp với giá trị server lưu trữ.
+
+Cách Spring Security bảo vệ khỏi CSRF
+Khi CSRF protection được bật, mỗi form hoặc yêu cầu sẽ được đính kèm một CSRF token.
+
+Token này thường được lưu trữ trong session của server.
+Trong giao diện, token được thêm vào các form HTML dưới dạng input ẩn:
+html
+Copy code
+<input type="hidden" name="_csrf" value="csrf-token-value">
+Khi người dùng gửi yêu cầu:
+
+Token này được gửi đi (qua form hoặc header).
+Server kiểm tra token từ yêu cầu với token đã lưu. Nếu không khớp, yêu cầu bị từ chối.
+Cấu hình CSRF trong Spring Security
+Mặc định, CSRF protection được bật trong Spring Security. Bạn có thể cấu hình nó trong file SecurityConfig.
+
+1. Bật CSRF (mặc định):
+java
+Copy code
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .csrf() // CSRF được bật mặc định
+            .and()
+            .authorizeRequests()
+            .antMatchers("/public/**").permitAll()
+            .anyRequest().authenticated();
+    }
+}
+2. Vô hiệu hóa CSRF (không khuyến khích):
+java
+Copy code
+http.csrf().disable();
+Lý do vô hiệu hóa: Các API REST hoặc ứng dụng không lưu session có thể không cần CSRF vì chúng sử dụng token-based authentication (JWT, OAuth).
+3. Thêm CSRF Token vào form:
+Spring Security tự động thêm token vào các form được sinh bởi Thymeleaf:
+
+html
+Copy code
+<form method="POST" action="/submit">
+    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+    <button type="submit">Submit</button>
+</form>
+4. Xử lý CSRF trong API:
+Nếu sử dụng API, token có thể được gửi qua header:
+
+http
+Copy code
+POST /api/resource HTTP/1.1
+Host: example.com
+X-CSRF-Token: csrf-token-value
+Khi nào cần CSRF Protection?
+Cần CSRF protection:
+
+Ứng dụng web có sử dụng cookie-based authentication (session).
+Có các thao tác cần xác thực (thêm, xóa, sửa dữ liệu).
+Không cần CSRF protection:
+
+Ứng dụng sử dụng token-based authentication (JWT).
+Các API REST chỉ nhận dữ liệu qua header, không dựa vào cookie.
+Các bước giảm thiểu CSRF
+Sử dụng CSRF Token: Mỗi yêu cầu cần có token hợp lệ.
+Xác thực nguồn yêu cầu: Sử dụng CORS (Cross-Origin Resource Sharing) để kiểm soát nguồn gốc các yêu cầu.
+Sử dụng SameSite Cookies: Định cấu hình cookie ở chế độ SameSite để hạn chế việc gửi cookie qua trang web khác.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+. Annotations
+@Configuration
+Đây là một annotation của Spring cho biết lớp DemoSecurityConfig là một lớp cấu hình.
+Các phương thức bên trong lớp này có thể định nghĩa các bean sẽ được quản lý bởi Spring IoC container.
+@Bean
+Phương thức được đánh dấu bằng @Bean sẽ trả về một đối tượng (bean) được quản lý bởi Spring.
+Trong đoạn mã trên, phương thức userDetailsManager() tạo ra một bean kiểu InMemoryUserDetailsManager, giúp Spring Security quản lý người dùng trong bộ nhớ (in-memory).
+2. Các thành phần trong code
+InMemoryUserDetailsManager
+Đây là một lớp do Spring Security cung cấp, dùng để quản lý thông tin người dùng trong bộ nhớ.
+Dùng để lưu danh sách các tài khoản (username, password, vai trò) cho mục đích phát triển và thử nghiệm. Không nên dùng cho sản phẩm thực tế.
+UserDetails
+Là một interface trong Spring Security, đại diện cho thông tin người dùng. Nó chứa:
+Username: Tên đăng nhập.
+Password: Mật khẩu (mã hóa hoặc không).
+Roles: Danh sách vai trò mà người dùng được gán (ví dụ: EMPLOYEE, MANAGER, ADMIN)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
