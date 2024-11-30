@@ -1219,3 +1219,78 @@ Tóm tắt
 ENGINE = InnoDB: Sử dụng cơ chế lưu trữ InnoDB cho bảng.
 auto_increment=1: Bắt đầu giá trị tự động tăng từ 1.
 DEFAULT CHARSET=latin1: Sử dụng bộ ký tự Latin1 để lưu trữ dữ liệu văn bản (không phù hợp với dữ liệu tiếng Việt).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Đoạn mã này là một cấu hình trong Spring Security để thiết lập cách xác thực người dùng dựa trên cơ sở dữ liệu (JDBC). Dưới đây là giải thích từng dòng mã:
+
+---
+
+### **1. `@Bean`**
+Annotation này đánh dấu phương thức `userDetailsManager` là một *Spring Bean*.
+- Bean này sẽ được Spring quản lý và có thể được sử dụng ở các phần khác trong ứng dụng.
+- Ở đây, nó tạo ra một đối tượng `UserDetailsManager` cho Spring Security.
+
+---
+
+### **2. `public UserDetailsManager userDetailsManager(DataSource dataSource)`**
+- Phương thức này trả về một đối tượng `UserDetailsManager`.
+- **`DataSource dataSource`** là đối tượng được Spring cung cấp, chứa thông tin kết nối đến cơ sở dữ liệu (ví dụ: URL, username, password).
+
+---
+
+### **3. `JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);`**
+- **`JdbcUserDetailsManager`**: Là một lớp tích hợp trong Spring Security, cung cấp cách lấy thông tin người dùng và vai trò từ cơ sở dữ liệu.
+- **`dataSource`**: Được truyền vào để `JdbcUserDetailsManager` sử dụng kết nối cơ sở dữ liệu.
+
+---
+
+### **4. `userDetailsManager.setUsersByUsernameQuery(...)`**
+- Dòng này tùy chỉnh truy vấn SQL dùng để lấy thông tin người dùng từ bảng `users`.
+- Mặc định, `JdbcUserDetailsManager` sử dụng truy vấn:
+  ```sql
+  SELECT username, password, enabled FROM users WHERE username = ?;
+  ```
+- Ở đây, bạn thay đổi để khớp với cấu trúc bảng của bạn:
+  ```sql
+  SELECT username, password, enable FROM users WHERE username = ?;
+  ```
+  > **`enable`** thay vì `enabled`, vì tên cột trong cơ sở dữ liệu của bạn khác với mặc định.
+
+---
+
+### **5. `userDetailsManager.setAuthoritiesByUsernameQuery(...)`**
+- Dòng này tùy chỉnh truy vấn SQL để lấy thông tin vai trò của người dùng từ bảng `authorities`.
+- Mặc định, `JdbcUserDetailsManager` sử dụng truy vấn:
+  ```sql
+  SELECT username, authority FROM authorities WHERE username = ?;
+  ```
+- Trong trường hợp này, bạn vẫn sử dụng truy vấn mặc định vì cấu trúc bảng `authorities` của bạn phù hợp.
+
+---
+
+### **6. `return userDetailsManager;`**
+- Phương thức trả về đối tượng `userDetailsManager`, đã được cấu hình với các truy vấn phù hợp.
+
+---
+
+### **Tóm tắt**
+- Phương thức này thiết lập một cách bảo mật Spring Security lấy dữ liệu xác thực và vai trò từ cơ sở dữ liệu.
+- Bạn đã cấu hình hai truy vấn:
+  1. **Lấy thông tin người dùng:** từ bảng `users`.
+  2. **Lấy vai trò người dùng:** từ bảng `authorities`.
+- Điều này cho phép Spring Security kiểm tra thông tin đăng nhập và quyền truy cập dựa trên dữ liệu trong cơ sở dữ liệu.
+
+Nếu bạn cần thêm chi tiết hoặc ví dụ, hãy cho biết!
