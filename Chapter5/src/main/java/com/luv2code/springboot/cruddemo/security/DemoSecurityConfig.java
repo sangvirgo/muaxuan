@@ -20,15 +20,23 @@ public class DemoSecurityConfig {
 // add sup for jdbc authentication
     @Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
-        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
 
-        // Tùy chỉnh truy vấn nếu cần
-        userDetailsManager.setUsersByUsernameQuery(
-                "SELECT username, password, enable FROM users WHERE username = ?");
-        userDetailsManager.setAuthoritiesByUsernameQuery(
-                "SELECT username, authority FROM authorities WHERE username = ?");
+//        // Tùy chỉnh truy vấn nếu cần
+//        userDetailsManager.setUsersByUsernameQuery(
+//                "SELECT username, password, enable FROM users WHERE username = ?");
+//        userDetailsManager.setAuthoritiesByUsernameQuery(
+//                "SELECT username, authority FROM authorities WHERE username = ?");
 
-        return userDetailsManager;
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+
+        jdbcUserDetailsManager.setUsersByUsernameQuery(
+                "SELECT user_id, pw, active FROM members WHERE user_id=?"
+        );
+
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
+                "SELECT user_id, role FROM roles WHERE user_id=?"
+        );
+        return jdbcUserDetailsManager;
     }
 
 

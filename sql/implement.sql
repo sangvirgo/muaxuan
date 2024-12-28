@@ -73,7 +73,7 @@
 
 
 
-USE `employee_directory`;
+-- USE `employee_directory`;
 
 -- DROP TABLE IF EXISTS `authorities`;
 -- DROP TABLE IF EXISTS `users`;
@@ -82,7 +82,7 @@ USE `employee_directory`;
 
 -- CREATE TABLE `users` (
 -- 	`username` VARCHAR(50) NOT NULL,
---     `password` VARCHAR(50) NOT NULL,
+--     `password` CHAR(68) NOT NULL,
 --     `enable` TINYINT NOT NULL,
 --     PRIMARY KEY (`username`)
 -- ) ENGINE = InnoDB DEFAULT CHARSET=latin1;
@@ -90,9 +90,9 @@ USE `employee_directory`;
 
 -- INSERT INTO `users` 
 -- VALUES 
--- ('john', '{noop}test123', 1),
--- ('mary', '{noop}test123', 1),
--- ('susan', '{noop}test123', 1);
+-- ('john', '{bcrypt}$2a$10$U08KuwslGaJhtoM38pnCm.nX7f/UrBOoaOQmGHvqZZFyVjFnWz4Am', 1),
+-- ('mary', '{bcrypt}$2a$10$U08KuwslGaJhtoM38pnCm.nX7f/UrBOoaOQmGHvqZZFyVjFnWz4Am', 1),
+-- ('susan', '{bcrypt}$2a$10$U08KuwslGaJhtoM38pnCm.nX7f/UrBOoaOQmGHvqZZFyVjFnWz4Am', 1);
 
 
 
@@ -119,5 +119,54 @@ USE `employee_directory`;
 -- SELECT * FROM users;-- 
 
 
-UPDATE `employee_directory`.`users` SET `password` = '{noop}test123' WHERE `username` = 'susan';
-SELECT * FROM users;
+-- UPDATE `employee_directory`.`users` SET `password` = '{noop}test123' WHERE `username` = 'susan';
+-- SELECT * FROM users;
+
+
+
+
+
+
+USE `employee_directory`;
+
+DROP TABLE IF EXISTS `roles`;
+DROP TABLE IF EXISTS `members`;
+
+CREATE TABLE `members` (
+	`user_id` varchar(50) NOT NULL,
+    `pw` char(68) NOT NULL,
+    `active` tinyint NOT NULL,
+    PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+INSERT INTO `members`
+VALUES
+('john','{bcrypt}$2a$10$RlEAbaVgIndLHJKzb7moTuaA.XKjywJYX1ZwW/MWcUXiNxmpP0vq2',1),
+('mary','{bcrypt}$2a$10$RlEAbaVgIndLHJKzb7moTuaA.XKjywJYX1ZwW/MWcUXiNxmpP0vq2',1),
+('susan','{bcrypt}$2a$10$RlEAbaVgIndLHJKzb7moTuaA.XKjywJYX1ZwW/MWcUXiNxmpP0vq2',1);
+
+
+CREATE TABLE `roles` (
+  `user_id` varchar(50) NOT NULL,
+  `role` varchar(50) NOT NULL,
+  UNIQUE KEY `authorities5_idx_1` (`user_id`,`role`),
+  CONSTRAINT `authorities5_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `members` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+
+
+
+INSERT INTO `roles`
+VALUES
+('john','ROLE_EMPLOYEE'),
+('mary','ROLE_EMPLOYEE'),
+('mary','ROLE_MANAGER'),
+('susan','ROLE_EMPLOYEE'),
+('susan','ROLE_MANAGER'),
+('susan','ROLE_ADMIN');
+
+
+
+
