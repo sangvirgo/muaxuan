@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Thymeleaf Demo</title>
+    <link rel="stylesheet"
+            th:href="@{/css/demo.css}"/>
 </head>
 <body>
-    <p th:text="'Time on the server is: '+${theDate}"> Hi </p>
+    <p th:text="'Time on the server is: '+${theDate}" class="funny"> Hi </p>
 </body>
 </html>
