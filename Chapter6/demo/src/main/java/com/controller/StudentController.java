@@ -19,6 +19,9 @@ public class StudentController {
     @Value("${favoriteLanguage}")
     private List<String> favoriteLanguage;
 
+    @Value("${favoriteSystem}")
+    private List<String> favoriteSystem;
+
     @GetMapping("/showStudentForm")
     public String showForm(Model model) {
         Student temp=new Student();
@@ -28,6 +31,8 @@ public class StudentController {
         model.addAttribute("student", temp);
 
         model.addAttribute("favoriteLanguage", favoriteLanguage);
+
+        model.addAttribute("favoriteSystem", favoriteSystem);
 
         return "student-form";
     }

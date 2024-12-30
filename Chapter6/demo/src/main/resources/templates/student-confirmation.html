@@ -14,5 +14,12 @@
 
 <br><br>
 <h2>The Favorite Language: <span th:text="${student.favoriteLanguage}"></span></h2>
+
+<br><br>
+<h2>The Favorite System:</h2>
+
+<ol>
+    <li th:each="temp: ${student.favoriteSystem}" th:text="${temp}"></li>
+</ol>
 </body>
 </html>

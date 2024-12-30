@@ -24,9 +24,19 @@
 
     <label>Favorite Programing Language: </label>
 <!--    <input type="radio" th:field="*{favoriteLanguage}" th:value="Java">Java</input>-->
-    <input type="radio" th:each="temp:${favoriteLanguage}" th:value="${temp}" th:text="${temp}"/>
+    <input type="radio" th:field="*{favoriteLanguage}"
+                        th:each="temp:${favoriteLanguage}"
+                        th:value="${temp}"
+                        th:text="${temp}" />
     <br><br>
 
+    <label>Favorite System: </label>
+<!--        <input type="checkbox" th:field="*{favoriteSystem}" th:value="Linux">Linux</input>-->
+    <input type="checkbox" th:field="*{favoriteSystem}"
+           th:each="temp:${favoriteSystem}"
+           th:value="${temp}"
+           th:text="${temp}" />
+    <br><br>
 
     <input type="submit" value="submit"/>
 </form>
