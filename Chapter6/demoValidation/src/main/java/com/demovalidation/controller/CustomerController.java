@@ -33,6 +33,11 @@ public class CustomerController {
 
     @PostMapping("/processCustomerForm")
     public String processCustomerForm(@Valid @ModelAttribute("customer") Customer theCustomer, BindingResult theBindingResult) {
+        System.out.println("Error: " + theBindingResult.toString());
+
+        System.out.println("\n\n\n\n");
+
+//        typeMismatch.customer.feeGas
         if(theBindingResult.hasErrors()) {
             return "customer-form";
         } else {
