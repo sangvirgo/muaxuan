@@ -11,7 +11,7 @@
         <h3>Employee Directory</h3>
         <hr>
 
-        <a th:href="@{/showFormForAdd}"
+        <a th:href="@{/employees/showFormForAdd}"
             class="btn btn-primary btn-sm mb-3">
             Add Employee
         </a>
@@ -22,14 +22,27 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
             <tbody>
                 <tr th:each="temp: ${employees}">
-                    <td th:text="${temp.firstName}"></td>
-                    <td th:text="${temp.lastName}"></td>
-                    <td th:text="${temp.email}"></td>
+                    <td th:text="${temp.firstName}" class="text-center"></td>
+                    <td th:text="${temp.lastName}" class="text-center"></td>
+                    <td th:text="${temp.email}" class="text-center"></td>
+
+                    <th>
+                        <a th:href="@{/employees/showFormForUpdate(employeeId=${temp.id})}"
+                            class="btn btn-info btn-sm rounded">
+                            Update
+                        </a>
+
+                        <a th:href="@{/employees/showFormForDelete(employeeId=${temp.id})}"
+                            class="btn btn-info btn-sm rounded">
+                            Delete
+                        </a>
+                    </th>
                 </tr>
             </tbody>
         </table>

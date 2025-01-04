@@ -15,7 +15,7 @@ public class EmployeeController {
     private EmployeeService theEmployeeService;
 
     public EmployeeController(EmployeeService theemployeeService) {
-        theEmployeeService=theemployeeService;
+        this.theEmployeeService=theemployeeService;
     }
 
     @GetMapping("/list")
@@ -29,12 +29,25 @@ public class EmployeeController {
     public String showFormForAdd(Model theModel) {
         Employee temp=new Employee();
         theModel.addAttribute("employee", temp);
-        return "employee-form";
+        return "employees/employee-form";
     }
 
     @PostMapping("/save")
     public String saveEmployee(@ModelAttribute("employee") Employee theEmployee) {
         theEmployeeService.save(theEmployee);
-        return "redict:/employees/list";
+        return "redirect:/employees/list";
+    }
+
+    @GetMapping("showFormForUpdate")
+    public String showFormForUpdate(@RequestParam("employeeId") int theInt, Model theModel) {
+        Employee temp=theEmployeeService.findById(theInt);
+        theModel.addAttribute("employee", temp);
+        return "employees/employee-form";
+    }
+
+    @GetMapping("/showFormForDelete")
+    public String showFormForDelete(@RequestParam("employeeId") int theId) {
+        theEmployeeService.deleteById(theId);
+        return "redirect:/employees/list";
     }
 }

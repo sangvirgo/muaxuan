@@ -14,6 +14,9 @@
         <h4>Save Employee</h4>
         <form action="#" th:action="@{/employees/save}"
               th:object="${employee}" method="POST">
+
+            <input type="hidden" th:field="*{id}"/>
+
             <input class="form-control mb-4 w-25"
                     type="text" th:field="*{firstName}" placeholder="First Name"/>
             <br>
@@ -27,7 +30,7 @@
             <button type="submit" class="btn btn-info col-2">Save</button>
 
             <hr>
-            <a th:href="@{/employee/list}">Back to Employees list</a>
+            <a th:href="@{/employees/list}">Back to Employees list</a>
         </form>
     </div>
 </body>
