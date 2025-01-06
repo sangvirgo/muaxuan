@@ -11,4 +11,11 @@ public class DemoController {
 
         return "home";
     }
+
+
+    @GetMapping("/leaders")
+    public String showHome() {
+
+        return "leader-page";
+    }
 }

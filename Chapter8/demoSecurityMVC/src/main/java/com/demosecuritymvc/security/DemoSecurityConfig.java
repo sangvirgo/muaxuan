@@ -3,6 +3,7 @@ package com.demosecuritymvc.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
@@ -21,13 +22,13 @@ public class DemoSecurityConfig {
         UserDetails mary= User.builder()
                 .username("mary")
                 .password("{noop}sang123")
-                .roles("EMPLOYEE, MANAGER")
+                .roles("EMPLOYEE MANAGER")
                 .build();
 
         UserDetails susan= User.builder()
                 .username("susan")
                 .password("{noop}sang123")
-                .roles("EMPLOYEE, MANAGER, ADMIN")
+                .roles("EMPLOYEE MANAGER ADMIN")
                 .build();
 
         return new InMemoryUserDetailsManager(join, mary, susan);
@@ -45,7 +46,9 @@ public class DemoSecurityConfig {
                                         .loginPage("/showMyLoginPage")
                                         .loginProcessingUrl("/authenticateTheUser")
                                         .permitAll()
-                        );
+                        )
+                .logout(LogoutConfigurer::permitAll
+                );
 
         return http.build();
     }
