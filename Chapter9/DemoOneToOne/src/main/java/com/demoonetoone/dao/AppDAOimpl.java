@@ -1,6 +1,7 @@
 package com.demoonetoone.dao;
 
 import com.demoonetoone.entity.Instructor;
+import com.demoonetoone.entity.InstructorDetail;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,4 +36,19 @@ public class AppDAOimpl implements AppDAO{
 
         entityManager.remove(temp);
     }
+
+    @Override
+    public InstructorDetail findInstructorDetailById(int theId) {
+        return entityManager.find(InstructorDetail.class, theId);
+    }
+
+
+    // want only delete detail
+    @Override
+    @Transactional
+    public void deleteInstructorDetailById(int theId) {
+        InstructorDetail temp=entityManager.find(InstructorDetail.class, theId);
+
+        temp.getInstructor().setInstructorDetail(null);
+        entityManager.remove(temp);    }
 }

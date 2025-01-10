@@ -24,8 +24,23 @@ public class DemoOneToOneApplication {
 
 //            findInstructor(theAppDAO);
 
-            deleteInstructor(theAppDAO);
+//            deleteInstructor(theAppDAO);
+
+//            findInstructorDetail(theAppDAO);
+
+            deleteInstructorDetail(theAppDAO);
         };
+    }
+
+    private void deleteInstructorDetail(AppDAO theAppDAO) {
+
+        theAppDAO.deleteInstructorDetailById(4);
+    }
+
+    private void findInstructorDetail(AppDAO theAppDAO) {
+        InstructorDetail temp=theAppDAO.findInstructorDetailById(2);
+        System.out.println(temp.getInstructor().toString());
+        System.out.println(temp.toString());
     }
 
     private void deleteInstructor(AppDAO theAppDAO) {

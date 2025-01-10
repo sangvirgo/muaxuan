@@ -18,6 +18,9 @@ public class InstructorDetail {
     @Column(name = "hobby")
     private String hobby;
 
+    @OneToOne(mappedBy = "instructorDetail", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private Instructor instructor;
+
     public InstructorDetail() {
     }
 
@@ -50,6 +53,13 @@ public class InstructorDetail {
         this.youtubeChannel = youtubeChannel;
     }
 
+    public Instructor getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
+    }
 
     @Override
     public String toString() {
