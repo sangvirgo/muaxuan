@@ -1,6 +1,7 @@
 package com.demoonetoone;
 
 import com.demoonetoone.dao.AppDAO;
+import com.demoonetoone.entity.Course;
 import com.demoonetoone.entity.Instructor;
 import com.demoonetoone.entity.InstructorDetail;
 import org.springframework.boot.ApplicationArguments;
@@ -28,8 +29,36 @@ public class DemoOneToOneApplication {
 
 //            findInstructorDetail(theAppDAO);
 
-            deleteInstructorDetail(theAppDAO);
+//            deleteInstructorDetail(theAppDAO);
+
+            createInstructorWithCourses(theAppDAO);
         };
+    }
+
+    private void createInstructorWithCourses(AppDAO theAppDAO) {
+        // Create the first InstructorDetail object
+        InstructorDetail instructorDetail1 = new InstructorDetail("http://www.youtube.com/channel1", "Guitar");
+        // Create the first Instructor object and associate it with the first InstructorDetail
+        Instructor instructor = new Instructor("John", "Doe", "john.doe@example.com");
+        instructor.setInstructorDetail(instructorDetail1);
+
+        // Create five Course objects
+        Course course1 = new Course("Guitar - The Ultimate Guide");
+        Course course2 = new Course("Piano for Beginners");
+        Course course3 = new Course("Advanced Guitar Techniques");
+        Course course4 = new Course("Music Theory 101");
+        Course course5 = new Course("Songwriting Masterclass");
+
+        instructor.add(course1);
+        instructor.add(course2);
+        instructor.add(course3);
+        instructor.add(course4);
+        instructor.add(course5);
+
+        theAppDAO.save(instructor);
+        
+        System.out.println(instructor);
+        System.out.println(instructor.getCourses());
     }
 
     private void deleteInstructorDetail(AppDAO theAppDAO) {
