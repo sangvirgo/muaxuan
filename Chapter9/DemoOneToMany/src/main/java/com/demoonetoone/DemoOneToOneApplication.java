@@ -10,6 +10,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.List;
+
 @SpringBootApplication
 public class DemoOneToOneApplication {
 
@@ -25,14 +27,64 @@ public class DemoOneToOneApplication {
 
 //            findInstructor(theAppDAO);
 
-//            deleteInstructor(theAppDAO);
-
 //            findInstructorDetail(theAppDAO);
 
 //            deleteInstructorDetail(theAppDAO);
 
-            createInstructorWithCourses(theAppDAO);
+//            createInstructorWithCourses(theAppDAO);
+
+//            findInstructorWithCourses(theAppDAO);
+
+//            findCourseForInstructor(theAppDAO);
+
+//            findInstructorWithCoursesJoinFetch(theAppDAO);
+
+//            updateCourse(theAppDAO);
+
+//            deleteInstructorWithCourse(theAppDAO);
+
+            deleteCourseById(theAppDAO);
         };
+    }
+
+    private void deleteCourseById(AppDAO theAppDAO) {
+        theAppDAO.deleteCourseById(10);
+        theAppDAO.deleteCourseById(17);
+    }
+
+    private void deleteInstructorWithCourse(AppDAO theAppDAO) {
+        theAppDAO.deleteInstructorById(1);
+    }
+
+    private void updateCourse(AppDAO theAppDAO) {
+        Course temp=theAppDAO.findCourseById(10);
+
+
+        temp.setTitle("Sang");
+
+        theAppDAO.update(temp);
+    }
+
+    private void findInstructorWithCoursesJoinFetch(AppDAO theAppDAO) {
+        Instructor temp=theAppDAO.findInstructorByIdJoinFetch(1);
+        System.out.println(temp.getCourses());
+    }
+
+    private void findCourseForInstructor(AppDAO theAppDAO) {
+        Instructor tp=theAppDAO.findInstructorById(1);
+        System.out.println(tp);
+
+        List<Course> temp=theAppDAO.findCourseByInstructor(1);
+
+        tp.setCourses(temp);
+        System.out.println(tp.getCourses());
+    }
+
+    private void findInstructorWithCourses(AppDAO theAppDAO) {
+        Instructor temp=theAppDAO.findInstructorById(1);
+
+        System.out.println("The instructor: " + temp);
+        System.out.println("The associated courses: "+ temp.getCourses());
     }
 
     private void createInstructorWithCourses(AppDAO theAppDAO) {
@@ -43,11 +95,11 @@ public class DemoOneToOneApplication {
         instructor.setInstructorDetail(instructorDetail1);
 
         // Create five Course objects
-        Course course1 = new Course("Guitar - The Ultimate Guide");
-        Course course2 = new Course("Piano for Beginners");
-        Course course3 = new Course("Advanced Guitar Techniques");
-        Course course4 = new Course("Music Theory 101");
-        Course course5 = new Course("Songwriting Masterclass");
+        Course course1 = new Course("Introduction to Java Programming");
+        Course course2 = new Course("Web Development with Spring Boot");
+        Course course3 = new Course("Data Structures and Algorithms");
+        Course course4 = new Course("Database Management Systems");
+        Course course5 = new Course("Cloud Computing with AWS");
 
         instructor.add(course1);
         instructor.add(course2);
@@ -56,7 +108,7 @@ public class DemoOneToOneApplication {
         instructor.add(course5);
 
         theAppDAO.save(instructor);
-        
+
         System.out.println(instructor);
         System.out.println(instructor.getCourses());
     }
@@ -72,9 +124,6 @@ public class DemoOneToOneApplication {
         System.out.println(temp.toString());
     }
 
-    private void deleteInstructor(AppDAO theAppDAO) {
-        theAppDAO.deleteInstructorById(1);
-    }
 
     private void findInstructor(AppDAO theAppDAO) {
         Instructor temp=theAppDAO.findInstructorById(1);
