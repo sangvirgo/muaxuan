@@ -102,8 +102,6 @@ public class DemoOneToOneApplication {
         Course course5 = new Course("Cloud Computing with AWS");
 
 
-
-        
         instructor.add(course1);
         instructor.add(course2);
         instructor.add(course3);
