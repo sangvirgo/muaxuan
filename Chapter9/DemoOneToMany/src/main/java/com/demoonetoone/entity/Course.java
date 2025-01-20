@@ -3,6 +3,9 @@ package com.demoonetoone.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "course")
 public class Course {
@@ -20,6 +23,10 @@ public class Course {
                           CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "instructor_id")
     private Instructor instructor;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="course_id")
+    private List<Review> reviews;
 
     public Course() {
     }
@@ -52,11 +59,29 @@ public class Course {
         this.id = id;
     }
 
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public void addReview(Review theReview) {
+        if(reviews==null) {
+            reviews=new ArrayList<>();
+        }
+
+        reviews.add(theReview);
+    }
+
     @Override
     public String toString() {
         return "Course{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
+                ", instructor=" + instructor +
+                ", reviews=" + reviews +
                 '}';
     }
 }

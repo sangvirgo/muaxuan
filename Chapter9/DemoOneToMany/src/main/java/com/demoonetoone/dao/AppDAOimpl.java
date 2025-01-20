@@ -103,4 +103,9 @@ public class AppDAOimpl implements AppDAO{
         Course temp=entityManager.find(Course.class, theId);
         entityManager.remove(temp);
     }
+
+    @Override
+    public void save(Course theCourse) {
+        entityManager.persist(theCourse);
+    }
 }

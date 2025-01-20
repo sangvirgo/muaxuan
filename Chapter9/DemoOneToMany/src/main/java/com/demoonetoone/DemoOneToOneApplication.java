@@ -43,8 +43,14 @@ public class DemoOneToOneApplication {
 
 //            deleteInstructorWithCourse(theAppDAO);
 
-            deleteCourseById(theAppDAO);
+//            deleteCourseById(theAppDAO);
+
+            createCourseAndReview(theAppDAO);
         };
+    }
+
+    private void createCourseAndReview(AppDAO theAppDAO) {
+
     }
 
     private void deleteCourseById(AppDAO theAppDAO) {
