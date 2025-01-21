@@ -122,4 +122,9 @@ public class AppDAOimpl implements AppDAO{
 
         return rs;
     }
+
+    @Override
+    public Course findCourseAndStudentByCourseId(int theId) {
+        return null;
+    }
 }
