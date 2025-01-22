@@ -2,6 +2,7 @@ package com.demoonetoone;
 
 import com.demoonetoone.dao.AppDAO;
 import com.demoonetoone.entity.*;
+import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,8 +21,19 @@ public class DemoManyToManyApplication {
     @Bean
     public CommandLineRunner commandLineRunner(AppDAO theAppDAO) {
         return runner -> {
-            createCourseAndStudent(theAppDAO);
+//            createCourseAndStudent(theAppDAO);
+
+            findTheCourseAndStudent(theAppDAO);
         };
+    }
+
+
+    private void findTheCourseAndStudent(AppDAO theAppDAO) {
+        Course rs=theAppDAO.findCourseAndStudentByCourseId(10);
+
+        System.out.println(rs);
+        System.out.println(rs.getListStudent());
+
     }
 
     private void createCourseAndStudent(AppDAO theAppDAO) {

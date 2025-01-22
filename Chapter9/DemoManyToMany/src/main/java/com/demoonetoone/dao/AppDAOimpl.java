@@ -85,7 +85,7 @@ public class AppDAOimpl implements AppDAO{
         Instructor rs = query.getSingleResult();
         return rs;
     }
-
+    
     @Override
     @Transactional
     public void update(Course temp) {
@@ -125,6 +125,15 @@ public class AppDAOimpl implements AppDAO{
 
     @Override
     public Course findCourseAndStudentByCourseId(int theId) {
-        return null;
+        TypedQuery<Course> query=entityManager.createQuery(
+                "select c from Course c JOIN FETCH c.listStudent where c.id = :data",
+                Course.class
+        );
+
+        query.setParameter("data", theId);
+
+        Course rs= query.getSingleResult();
+
+        return rs;
     }
 }
