@@ -3,6 +3,7 @@ package com.demoonetoone.dao;
 import com.demoonetoone.entity.Course;
 import com.demoonetoone.entity.Instructor;
 import com.demoonetoone.entity.InstructorDetail;
+import com.demoonetoone.entity.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
@@ -85,7 +86,7 @@ public class AppDAOimpl implements AppDAO{
         Instructor rs = query.getSingleResult();
         return rs;
     }
-    
+
     @Override
     @Transactional
     public void update(Course temp) {
@@ -135,5 +136,23 @@ public class AppDAOimpl implements AppDAO{
         Course rs= query.getSingleResult();
 
         return rs;
+    }
+
+    @Override
+    public Student findStudentAndCourseByStudentId(int theId) {
+        TypedQuery<Student> query=entityManager.createQuery(
+                "select t from Student t JOIN FETCH t.listCourse where t.id=:data",
+                Student.class
+        );
+
+        query.setParameter("data", theId);
+
+        return query.getSingleResult();
+    }
+
+    @Override
+    @Transactional
+    public void save(Student theStudent) {
+        entityManager.persist(theStudent);
     }
 }

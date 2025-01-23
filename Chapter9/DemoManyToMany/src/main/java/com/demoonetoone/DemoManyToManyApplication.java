@@ -23,8 +23,23 @@ public class DemoManyToManyApplication {
         return runner -> {
 //            createCourseAndStudent(theAppDAO);
 
-            findTheCourseAndStudent(theAppDAO);
+//            findTheCourseAndStudent(theAppDAO);
+
+//            findTheStudentAndCourse(theAppDAO);
+
+            deleteCourseById(theAppDAO);
         };
+    }
+
+    private void deleteCourseById(AppDAO theAppDAO) {
+        theAppDAO.deleteCourseById(12);
+    }
+
+    private void findTheStudentAndCourse(AppDAO theAppDAO) {
+        Student temp=theAppDAO.findStudentAndCourseByStudentId(5);
+
+        System.out.println(temp);
+        System.out.println(temp.getListCourse());
     }
 
 
@@ -37,21 +52,32 @@ public class DemoManyToManyApplication {
     }
 
     private void createCourseAndStudent(AppDAO theAppDAO) {
-        Course course = new Course("Spring Boot - Advanced Techniques");
+        Student student = new Student("John", "Doe", "john.doe@example.com");
 
-        // Create three Student objects
-        Student student1 = new Student("John", "Doe", "john.doe@example.com");
-        Student student2 = new Student("Jane", "Smith", "jane.smith@example.com");
-        Student student3 = new Student("Mary", "Johnson", "mary.johnson@example.com");
+        Instructor instructor = new Instructor("Jane", "Doe", "jane.doe@example.com");
 
-        // Associate the students with the course
-        course.addStudent(student1);
-        course.addStudent(student2);
-        course.addStudent(student3);
+        Course course1 = new Course("Spring Boot - Advanced Sang Sang");
+        Course course2 = new Course("Hibernate - Mastery");
+        Course course3 = new Course("Microservices with Spring Cloud");
 
-        // Save the course (which will also save the students because of CascadeType.ALL)
-        System.out.println("Saving course: " + course);
-        theAppDAO.save(course);
+        course1.setInstructor(instructor);
+        course2.setInstructor(instructor);
+        course3.setInstructor(instructor);
+
+        Review review1 = new Review("Great course!");
+        Review review2 = new Review("Very informative.");
+        Review review3 = new Review("Excellent content.");
+
+        course1.addReview(review1);
+        course2.addReview(review2);
+        course3.addReview(review3);
+
+        student.addCoursetoStudent(course1);
+        student.addCoursetoStudent(course2);
+        student.addCoursetoStudent(course3);
+
+        System.out.println("Saving student: " + student);
+        theAppDAO.save(student);
 
         System.out.println("Done");
     }

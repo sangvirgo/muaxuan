@@ -3,6 +3,7 @@ package com.demoonetoone.dao;
 import com.demoonetoone.entity.Course;
 import com.demoonetoone.entity.Instructor;
 import com.demoonetoone.entity.InstructorDetail;
+import com.demoonetoone.entity.Student;
 
 import java.util.List;
 
@@ -32,4 +33,8 @@ public interface AppDAO {
     Course findCourseAndReviewsByCourseId(int theId);
 
     Course findCourseAndStudentByCourseId(int theId);
+
+    Student findStudentAndCourseByStudentId(int theId);
+
+    void save(Student theStudent);
 }
