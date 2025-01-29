@@ -1,5 +1,5 @@
 package com.demoaop.DAO;
 
-public interface AccountDAO {
+public interface MembershipDAO {
     void addAccount();
 }
