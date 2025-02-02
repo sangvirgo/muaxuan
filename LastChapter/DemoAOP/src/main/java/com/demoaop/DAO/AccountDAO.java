@@ -1,5 +1,7 @@
 package com.demoaop.DAO;
 
+import com.demoaop.entity.Account;
+
 public interface AccountDAO {
-    void addAccount();
+    void addAccount(Account theAccount);
 }

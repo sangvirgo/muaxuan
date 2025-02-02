@@ -2,6 +2,7 @@ package com.demoaop;
 
 import com.demoaop.DAO.AccountDAO;
 import com.demoaop.DAO.MembershipDAO;
+import com.demoaop.entity.Account;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,7 +23,8 @@ public class DemoAopApplication {
     }
 
     private void demoTheBeforeAdvice(AccountDAO theAccountDAO, MembershipDAO theMembershipDAO) {
-        theAccountDAO.addAccount();
+        Account newAccount = new Account("John Doe", "Gold");
+        theAccountDAO.addAccount(newAccount);
 
         theMembershipDAO.addAccount();
     }
