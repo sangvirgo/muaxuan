@@ -23,11 +23,17 @@ public class DemoAopApplication {
     }
 
     private void demoTheBeforeAdvice(AccountDAO theAccountDAO, MembershipDAO theMembershipDAO) {
-        Account newAccount = new Account("John Doe", "Gold");
+        Account newAccount = new Account();
 
         theMembershipDAO.addAccount();
 
         theAccountDAO.addAccount(newAccount, true);
+
+        theAccountDAO.setName("Sang");
+        theAccountDAO.setServiceCode("Gia Su");
+
+        String name=theAccountDAO.getName();
+        String code=theAccountDAO.getServiceCode();
 
     }
 }
