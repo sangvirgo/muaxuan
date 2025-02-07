@@ -2,10 +2,9 @@ package com.demoaop.Aspect;
 
 import com.demoaop.entity.Account;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
+import org.springframework.boot.autoconfigure.security.oauth2.server.servlet.OAuth2AuthorizationServerJwtAutoConfiguration;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -50,6 +49,57 @@ public class MyDemoLoggingAspect {
         }
     }
 
+
+    @AfterThrowing(
+            pointcut = "execution(* com.demoaop.DAO.AccountDAO.findAccount(..))",
+            throwing = "throwable"
+    )
+    public void afterThrowingFindAccountsAdvice(JoinPoint joinPoint, Throwable throwable) {
+        String method=joinPoint.getSignature().toShortString();
+
+        System.out.println("\n==========> Executing @AfterReturning on method: "+ method);
+
+        System.out.println("\n==========>Result is: "+ throwable);
+    }
+
+
+
+
+    @After("execution(* com.demoaop.DAO.AccountDAO.findAccount(..))")
+    public void afterFinallyFindAccountsAdvice(JoinPoint theJoinPoint) {
+        String method=theJoinPoint.getSignature().toShortString();
+
+        System.out.println("\n==========> Executing @After Finally on method: "+ method);
+    }
+
+
+    @Around("execution(* com.demoaop.service.TrafficService.getFortune(..))")
+    public Object aroundGetForture(
+            ProceedingJoinPoint theProceedingJoinPoint
+    ) throws Throwable {
+        String method=theProceedingJoinPoint.getSignature().toShortString();
+        System.out.println("\n----Around---- Executing @Around on method: "+ method);
+
+        long begin =System.currentTimeMillis();
+
+        Object rs=null;
+
+        try {
+            rs=theProceedingJoinPoint.proceed();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+
+            rs="Have bug!!!!!!!!!!";
+        }
+
+        long end= System.currentTimeMillis();
+
+        long duration=end-begin;
+
+        System.out.println("----Around----Duration: "+ duration/1000.0 + " second\n");
+
+        return rs;
+    }
 }
 
 

@@ -16,4 +16,6 @@ public interface AccountDAO {
     void setServiceCode(String serviceCode);
 
     List<Account> findAccount();
+
+    List<Account> findAccount(boolean trip);
 }

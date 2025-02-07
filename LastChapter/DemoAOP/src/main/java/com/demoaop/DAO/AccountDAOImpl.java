@@ -56,4 +56,24 @@ public class AccountDAOImpl implements AccountDAO {
 
         return rs;
     }
+
+    @Override
+    public List<Account> findAccount(boolean trip) {
+        if(trip) {
+            throw new RuntimeException("No soup for you !!!!!!!!!!!!!!!");
+        }
+
+        List<Account> rs=new ArrayList<>();
+
+        Account account1 = new Account("John Doe", "Gold");
+        Account account2 = new Account("Jane Smith", "Silver");
+        Account account3 = new Account("Jim Brown", "Platinum");
+
+        // Pass the Account objects to the addAccount method
+        rs.add(account1);
+        rs.add(account2);
+        rs.add(account3);
+
+        return rs;
+    }
 }
